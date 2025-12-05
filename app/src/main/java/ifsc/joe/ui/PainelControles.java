@@ -1,5 +1,8 @@
 package ifsc.joe.ui;
 
+import ifsc.joe.domain.impl.Aldeao;
+import ifsc.joe.domain.impl.Arqueiro;
+import ifsc.joe.domain.impl.Cavaleiro;
 import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
@@ -50,10 +53,23 @@ public class PainelControles {
      * Configura todos os listeners dos botões de movimento
      */
     private void configurarBotoesMovimento() {
-        buttonCima.addActionListener(e -> getTela().movimentarAldeoes(Direcao.CIMA));
-        buttonBaixo.addActionListener(e -> getTela().movimentarAldeoes(Direcao.BAIXO));
-        buttonEsquerda.addActionListener(e -> getTela().movimentarAldeoes(Direcao.ESQUERDA));
-        buttonDireita.addActionListener(e -> getTela().movimentarAldeoes(Direcao.DIREITA));
+        buttonCima.addActionListener(e -> movimentoPersonagens(Direcao.CIMA));
+        buttonBaixo.addActionListener(e -> movimentoPersonagens(Direcao.BAIXO));
+        buttonEsquerda.addActionListener(e -> movimentoPersonagens(Direcao.ESQUERDA));
+        buttonDireita.addActionListener(e -> movimentoPersonagens(Direcao.DIREITA));
+    }
+
+    // Método para movimento dos personagens de acordo com o botão selecionado.
+    private void movimentoPersonagens(Direcao direcao) {
+        if (todosRadioButton.isSelected()) {
+            getTela().movimentarPersonagens(direcao);
+        } else if (aldeaoRadioButton.isSelected()) {
+            getTela().movimentarTipos(direcao, Aldeao.class);
+        } else if (arqueiroRadioButton.isSelected()) {
+            getTela().movimentarTipos(direcao, Arqueiro.class);
+        } else if (cavaleiroRadioButton.isSelected()) {
+            getTela().movimentarTipos(direcao, Cavaleiro.class);
+        }
     }
 
     /**
@@ -90,17 +106,26 @@ public class PainelControles {
      */
     private void configurarBotoesCriacao() {
         bCriaAldeao.addActionListener(e -> criarAldeaoAleatorio());
-
         bCriaArqueiro.addActionListener(e -> criarArqueiroAleatorio());
-
         bCriaCavaleiro.addActionListener(e -> criarCavaleiroAleatorio());
     }
 
-    /**
-     * Configura o listener do botão de ataque
-     */
+    // Método para o ataque dos personagens selecionados no botão.
+    private void atacarPersonagens() {
+        if (todosRadioButton.isSelected()){
+            getTela().atacarGeral();
+        } else if (aldeaoRadioButton.isSelected()) {
+            getTela().atacarTipos(Aldeao.class);
+        } else if (arqueiroRadioButton.isSelected()) {
+            getTela().atacarTipos(Arqueiro.class);
+        } else if (cavaleiroRadioButton.isSelected()) {
+            getTela().atacarTipos(Cavaleiro.class);
+        }
+    }
+
+    // Configura o botão de ataque para o botão selecionado.
     private void configurarBotaoAtaque() {
-        atacarButton.addActionListener(e -> getTela().atacarAldeoes());
+        atacarButton.addActionListener(e -> atacarPersonagens());
     }
 
     /**

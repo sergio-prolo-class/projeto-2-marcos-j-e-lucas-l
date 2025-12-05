@@ -53,45 +53,55 @@ public class Tela extends JPanel {
         this.personagem.add(aldeao);
     }
 
-    /*Mesmo método para criar o arqueiro*/
+    // Mesmo método para criar o arqueiro.
     public void criarArqueiro(int x, int y) {
         Arqueiro arqueiro = new Arqueiro(x, y);
         arqueiro.desenhar(super.getGraphics(), this);
         this.personagem.add(arqueiro);
     }
 
-    /*Mesmo método para criar o cavaleiro.*/
+    // Mesmo método para criar o cavaleiro.
     public void criarCavaleiro(int x, int y) {
         Cavaleiro cavaleiro = new Cavaleiro(x, y);
         cavaleiro.desenhar(super.getGraphics(), this);
         this.personagem.add(cavaleiro);
     }
 
-    /**
-     * Atualiza as coordenadas X ou Y de todos os aldeoes
-     *
-     * @param direcao direcao para movimentar
-     */
-    public void movimentarAldeoes(Direcao direcao) {
+    // Movimentação de todos os personagens
+    public void movimentarPersonagens(Direcao direcao) {
         //TODO preciso ser melhorado
 
-        this.personagem.forEach(personagem -> personagem.mover(direcao, this.getWidth(), this.getHeight()));
+        this.personagem.forEach(p -> p.mover(direcao, this.getWidth(), this.getHeight()));
 
         // Depois que as coordenadas foram atualizadas é necessário repintar o JPanel
         this.repaint();
     }
 
-    /**
-     * Altera o estado do aldeão de atacando para não atacando e vice-versa
-     */
-    public void atacarAldeoes() {
+    // Movimentação de personagens por cada tipo
+    public void movimentarTipos(Direcao direcao, Class<? extends Personagem> tipo) {
+        this.personagem
+                .stream().filter(p -> tipo.isInstance(p))
+                .forEach(p -> p.mover(direcao, this.getWidth(), this.getHeight()));
+        this.repaint();
+    }
 
-        //TODO preciso ser melhorado
 
-        // Percorrendo a lista de aldeões e pedindo para todos atacarem
+    // Método de ataque geral.
+    public void atacarGeral() {
+
+        // Percorre a lista de personagens, método de atacar geral.
         this.personagem.forEach(Personagem::atacar);
 
         // Fazendo o JPanel ser redesenhado
         this.repaint();
     }
+
+    // Método de ataque por tipo de personagem.
+    public void atacarTipos(Class<? extends Personagem> tipo) {
+        this.personagem.stream()
+                .filter(p -> tipo.isInstance(p))
+                .forEach(Personagem::atacar);
+        this.repaint();
+    }
+
 }
