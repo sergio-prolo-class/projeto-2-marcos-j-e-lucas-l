@@ -5,6 +5,7 @@ import ifsc.joe.domain.Personagem;
 
 import ifsc.joe.domain.impl.Aldeao;
 import ifsc.joe.domain.impl.Cavaleiro;
+import ifsc.joe.domain.impl.Arqueiro;
 import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
@@ -66,6 +67,12 @@ public class Tela extends JPanel {
         Cavaleiro cavaleiro = new Cavaleiro(x, y);
         cavaleiro.desenhar(super.getGraphics(), this);
         this.personagens.add(cavaleiro);
+    }
+
+    public void criarArqueiro(int x, int y) {
+        Arqueiro arqueiro = new Arqueiro(x, y);
+        arqueiro.desenhar(super.getGraphics(), this);
+        this.personagens.add(arqueiro);
     }
 
 
