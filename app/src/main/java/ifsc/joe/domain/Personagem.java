@@ -16,7 +16,7 @@ public abstract class Personagem {
 
     protected int posX, posY;
     protected boolean atacando;
-    protected Imagem icone;
+    protected Image icone;
     protected String nomeImagem;
 
     public Personagem(int x, int y, String nomeImagem) {
@@ -33,7 +33,7 @@ public abstract class Personagem {
     }
 
     public void mover(Direcao direcao, int maxLargura, int maxAltura) {
-        int velocidade = getVelocidadeDeMovimento();
+        int velocidade = getVelocidadeBase();
 
 
         switch (direcao) {
