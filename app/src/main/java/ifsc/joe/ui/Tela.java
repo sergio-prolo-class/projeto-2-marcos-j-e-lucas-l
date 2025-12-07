@@ -1,6 +1,7 @@
 package ifsc.joe.ui;
 
 import ifsc.joe.domain.impl.Aldeao;
+import ifsc.joe.domain.impl.Cavaleiro;
 import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.util.Set;
 public class Tela extends JPanel {
 
     private final Set<Aldeao> aldeoes;
+    private final Set<Cavaleiro> cavaleiros;
 
     public Tela() {
 
@@ -18,6 +20,7 @@ public class Tela extends JPanel {
 
         this.setBackground(Color.white);
         this.aldeoes = new HashSet<>();
+        this.cavaleiros = new HashSet<>();
     }
 
     /**
@@ -48,6 +51,12 @@ public class Tela extends JPanel {
         Aldeao a = new Aldeao(x, y);
         a.desenhar(super.getGraphics(), this);
         this.aldeoes.add(a);
+    }
+
+    public void criarCavaleiro(int x, int y) {
+        Cavaleiro c = new Cavaleiro(x, y);
+        c.desenhar(super.getGraphics(), this);
+        this.cavaleiros.add(c);
     }
 
     /**
