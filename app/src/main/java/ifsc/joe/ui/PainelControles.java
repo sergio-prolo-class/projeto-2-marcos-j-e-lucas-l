@@ -67,7 +67,7 @@ public class PainelControles {
             mostrarMensagemNaoImplementado("Criar Arqueiro");
         });
 
-        //bCriaCavaleiro.addActionListener(e -> criarCavaleiroAleatorio());
+        bCriaCavaleiro.addActionListener(e -> criarCavaleiroAleatorio());
         
     }
 
@@ -79,7 +79,7 @@ public class PainelControles {
     }
 
     /**
-     * Cria um aldeão em posição aleatória na tela.
+     * Cria um personagens em posição aleatória na tela.
      */
     private void criarAldeaoAleatorio() {
         final int PADDING = 50;
@@ -89,13 +89,13 @@ public class PainelControles {
         getTela().criarAldeao(posX, posY);
     }
 
-    // private void criarCavaleiroAleatorio() {
-    //     final int PADDING = 50;
-    //     int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
-    //     int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
+    private void criarCavaleiroAleatorio() {
+        final int PADDING = 50;
+        int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
+        int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
 
-    //     getTela().criarCavaleiro(posX, posY);
-    // }
+        getTela().criarCavaleiro(posX, posY);
+    }
 
     /**
      * Exibe mensagem informando que a funcionalidade ainda não foi implementada.

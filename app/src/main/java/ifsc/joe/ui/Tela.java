@@ -50,8 +50,8 @@ public class Tela extends JPanel {
     }
 
     /**
-     * Cria um aldeao nas coordenadas X e Y, desenha-o neste JPanel
-     * e adiciona o mesmo na lista de aldeoes
+     * Cria um personagens nas coordenadas X e Y, desenha-o neste JPanel
+     * e adiciona o mesmo na lista de personagens:
      *
      * @param x coordenada X
      * @param y coordenada Y
@@ -62,12 +62,13 @@ public class Tela extends JPanel {
         this.personagens.add(aldeao);
     }
 
-    // Será implementada no futuro
-    // public void criarCavaleiro(int x, int y) {
-    //     Cavaleiro c = new Cavaleiro(x, y);
-    //     c.desenhar(super.getGraphics(), this);
-    //     this.personagens.add(c);
-    // }
+    public void criarCavaleiro(int x, int y) {
+        Cavaleiro cavaleiro = new Cavaleiro(x, y);
+        cavaleiro.desenhar(super.getGraphics(), this);
+        this.personagens.add(cavaleiro);
+    }
+
+
 
     /**
      * Atualiza as coordenadas X ou Y de todos os aldeoes
