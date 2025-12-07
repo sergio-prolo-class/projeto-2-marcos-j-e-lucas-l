@@ -1,1 +1,85 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/XD-ACkNn)
+## Sobre o andamento do Projeto: 
+
+Todas funcionalidades obrigatória descritas no site foram implemtadas.
+
+
+## Exemplo de como ficaram as implementações:
+
+> O fluxo das classes ficram assim:
+
+```md
+
+
+                       <<interface>>
+                         Coletador
+                     +----------------+
+                     | + coletar()    |
+                     | + getCap()     |
+                     +----------------+
+
+                               ^
+                               | implements
++----------------------------------------------------+
+|                 Personagem (abstract)              |
++----------------------------------------------------+
+| - posX, posY                                       |
+| - atacando                                         |
+| - icone, nomeImagem                                |
+| + desenhar()                                       |
+| + mover()                                          |
+| + alterarAtaque()                                  |
++----------------------------------------------------+
+            ^                ^                 ^
+            |                |                 |
+            |                |                 |
+   +--------------+  +--------------+   +--------------+
+   |   Aldeao     |  |  Cavaleiro   |   |  Arqueiro    |
+   +--------------+  +--------------+   +--------------+
+   | + atacar()   |  | ...          |   | ...          |
+   | (Coletador)  |  |              |   |              |
+   +--------------+  +--------------+   +--------------+
+
+
++-------------------------------------+
+|               Tela                  |
++-------------------------------------+
+| - personagens: Set<Personagem>      |
+| + criarAldeao()                     |
+| + criarArqueiro()                   |
+| + criarCavaleiro()                  |
+| + movimentarAldeoes()               |
+| + atacarAldeoes()                   |
++-------------------------------------+
+                 ^
+                 |
+                 | usada por
+                 |
++---------------------------------------+
+|           PainelControles             |
++---------------------------------------+
+| - tela: Tela                          |
+| - botões                              |
+| + configurarListeners()               |
+| + criarAldeaoAleatorio()              |
+| + criarArqueiroAleatorio()            |
+| + criarCavaleiroAleatorio()           |
++---------------------------------------+
+
+
+             +------------------+
+             |     Direcao      |
+             +------------------+
+             | CIMA, BAIXO,     |
+             | ESQUERDA, DIREITA|
+             +------------------+
+
+```
+
+
+### Próxima funcionalidades a serem trabalhada:
+
+1. *Controles Avançados*
+
+2. *Arquitetura de Software*
+
+> No momento só;
