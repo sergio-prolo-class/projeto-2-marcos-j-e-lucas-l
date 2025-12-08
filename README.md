@@ -2,6 +2,11 @@
 
 Todas funcionalidades obrigatória descritas no site foram implemtadas.
 
+<strong>Total de pontos até o momento:</strong> 4/32
+
+> implementações:
+
+1. Filtro por tipo - Concluido
 
 ## Exemplo de como ficaram as implementações:
 
@@ -83,3 +88,8 @@ Todas funcionalidades obrigatória descritas no site foram implemtadas.
 2. *Arquitetura de Software*
 
 > No momento só;
+
+
+### 4 pontos - Filtro por tipo
+
+Adicionado a movimentação dos tipos. Foi criada uma clase chamda `Move` que representa o tipo selecionado, ao ser selecionado outro tipo, e movimentado somente o tipo selecionado;
