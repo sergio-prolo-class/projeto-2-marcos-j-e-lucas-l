@@ -13,6 +13,11 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import java.util.stream.Collectors;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Tela extends JPanel {
 
     //private final Set<Aldeao> aldeoes;
@@ -22,9 +27,15 @@ public class Tela extends JPanel {
     private final Set<Personagem> personagens;
     // Atraves do polimorfismo será feito os filtros e movimentações separados;
 
+    // variável para pegar o tipo selecionado;
+    private String filtroAtual;
+
     public Tela() {
         this.setBackground(Color.white);
         this.personagens = new HashSet<>();
+
+        // Por padrão todos os tipo são selecionados;
+        this.filtroAtual = Move.TODOS;
 
         //TODO preciso ser melhorado
         //this.aldeoes = new HashSet<>();
@@ -75,26 +86,68 @@ public class Tela extends JPanel {
         this.personagens.add(arqueiro);
     }
 
+    // ajusta o tipo na variável do tipo;
+    public void setFiltrosPersonagem(String tipo) {
+        this.filtroAtual = tipo;
+    }
 
+
+    private boolean personagemCorrespondeAoFiltro(Personagem personagens) {
+        switch(filtroAtual) {
+            case "TODOS":
+                return true;
+            case "ALDEAO":
+                return personagens instanceof Aldeao;
+            case "ARQUEIRO":
+                return personagens instanceof Arqueiro;
+            case "CAVALEIRO":
+                return personagens instanceof Cavaleiro;
+            default:
+                return false;
+        }
+    }
+
+    private Set<Personagem> getPersonagensFiltrados() {
+        return personagens.stream()
+                .filter(this::personagemCorrespondeAoFiltro)
+                .collect(Collectors.toSet());
+    }
 
     /**
      * Atualiza as coordenadas X ou Y de todos os aldeoes
      *
      * @param direcao direcao para movimentar
      */
-    public void movimentarAldeoes(Direcao direcao) {
-        //TODO preciso ser melhorado
 
-        this.personagens.forEach(personagens -> personagens.mover(direcao, this.getWidth(), this.getHeight()));
+    // nova implementação de movimentação:
+    public void movimentarPersonagens(Direcao direcao) {
+        Set<Personagem> personagensFiltrados = getPersonagensFiltrados();
 
-        // Depois que as coordenadas foram atualizadas é necessário repintar o JPanel
+        personagensFiltrados.forEach(personagem -> 
+            personagem.mover(direcao, this.getWidth(), this.getHeight())
+        );
         this.repaint();
+
     }
+    // antiga implmentação:
+
+    // public void movimentarAldeoes(Direcao direcao) {
+    //     //TODO preciso ser melhorado
+
+    //     this.personagens.forEach(personagens -> personagens.mover(direcao, this.getWidth(), this.getHeight()));
+
+    //     // Depois que as coordenadas foram atualizadas é necessário repintar o JPanel
+    //     this.repaint();
+    // }
+
 
     /**
      * Altera o estado do aldeão de atacando para não atacando e vice-versa
      */
     public void atacarAldeoes() {
+        Set<Personagem> personagensFiltrados = getPersonagensFiltrados();
+
+        personagensFiltrados.forEach(Personagem::alterAtaque);
 
         //TODO preciso ser melhorado
 
@@ -104,4 +157,16 @@ public class Tela extends JPanel {
         // Fazendo o JPanel ser redesenhado
         this.repaint();
     }
+
+    // Logs para testar o funcionamento;
+    public String logsDosFiltros() {
+        Set<Personagem> filtrados = getPersonagensFiltrados();
+        return String.format("Filtrado: %s | Personagens afetados: %d de %d", filtroAtual, filtrados.size(), personagens.size());
+    }
+
+    public String logsDeCriacao(String p) {
+        String iso = LocalDateTime.now().toString(); // 2000-12-08
+        return String.format("Personagem: %s | Criado em: %s | Quatidade P.: %d", p, iso, personagens.size());
+    }
+
 }
