@@ -1,5 +1,8 @@
 package ifsc.joe.ui;
 
+import ifsc.joe.domain.impl.Aldeao;
+import ifsc.joe.domain.impl.Arqueiro;
+import ifsc.joe.domain.impl.Cavaleiro;
 import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
@@ -50,32 +53,24 @@ public class PainelControles {
      * Configura todos os listeners dos botões de movimento
      */
     private void configurarBotoesMovimento() {
-        buttonCima.addActionListener(e -> getTela().movimentarAldeoes(Direcao.CIMA));
-        buttonBaixo.addActionListener(e -> getTela().movimentarAldeoes(Direcao.BAIXO));
-        buttonEsquerda.addActionListener(e -> getTela().movimentarAldeoes(Direcao.ESQUERDA));
-        buttonDireita.addActionListener(e -> getTela().movimentarAldeoes(Direcao.DIREITA));
+        buttonCima.addActionListener(e -> movimentoPersonagens(Direcao.CIMA));
+        buttonBaixo.addActionListener(e -> movimentoPersonagens(Direcao.BAIXO));
+        buttonEsquerda.addActionListener(e -> movimentoPersonagens(Direcao.ESQUERDA));
+        buttonDireita.addActionListener(e -> movimentoPersonagens(Direcao.DIREITA));
     }
 
-    /**
-     * Configura todos os listeners dos botões de criação
-     */
-    private void configurarBotoesCriacao() {
-        bCriaAldeao.addActionListener(e -> criarAldeaoAleatorio());
-        bCriaArqueiro.addActionListener(e -> criarArqueiroAleatorio());
-        bCriaCavaleiro.addActionListener(e -> criarCavaleiroAleatorio());
-        
+    private void movimentoPersonagens(Direcao direcao) {
+        if (todosRadioButton.isSelected()) {
+            getTela().movimentarPersonagens(direcao);
+        } else if (aldeaoRadioButton.isSelected()) {
+            getTela().movimentarTipos(direcao, Aldeao.class);
+        } else if (arqueiroRadioButton.isSelected()) {
+            getTela().movimentarTipos(direcao, Arqueiro.class);
+        } else if (cavaleiroRadioButton.isSelected()) {
+            getTela().movimentarTipos(direcao, Cavaleiro.class);
+        }
     }
 
-    /**
-     * Configura o listener do botão de ataque
-     */
-    private void configurarBotaoAtaque() {
-        atacarButton.addActionListener(e -> getTela().atacarAldeoes());
-    }
-
-    /**
-     * Cria um personagens em posição aleatória na tela.
-     */
     private void criarAldeaoAleatorio() {
         final int PADDING = 50;
         int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
@@ -98,6 +93,28 @@ public class PainelControles {
         int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
 
         getTela().criarArqueiro(posX, posY);
+    }
+
+    private void configurarBotoesCriacao() {
+        bCriaAldeao.addActionListener(e -> criarAldeaoAleatorio());
+        bCriaArqueiro.addActionListener(e -> criarArqueiroAleatorio());
+        bCriaCavaleiro.addActionListener(e -> criarCavaleiroAleatorio());
+    }
+
+    private void atacarPersonagens() {
+        if (todosRadioButton.isSelected()) {
+            getTela().atacarGeral();
+        } else if (aldeaoRadioButton.isSelected()) {
+            getTela().atacarTipos(Aldeao.class);
+        } else if (arqueiroRadioButton.isSelected()) {
+            getTela().atacarTipos(Arqueiro.class);
+        } else if (cavaleiroRadioButton.isSelected()) {
+            getTela().atacarTipos(Cavaleiro.class);
+        }
+    }
+
+    private void configurarBotaoAtaque() {
+        atacarButton.addActionListener(e -> atacarPersonagens());
     }
 
     /**

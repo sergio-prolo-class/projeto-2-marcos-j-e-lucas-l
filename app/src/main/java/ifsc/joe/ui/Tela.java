@@ -15,9 +15,6 @@ import java.util.Set;
 
 public class Tela extends JPanel {
 
-    //private final Set<Aldeao> aldeoes;
-    //private final Set<Cavaleiro> cavaleiros;
-
     //conforme as atividades do professor, não precisa de varias estruturas de dados para retratar os personagem diferentes;
     private final Set<Personagem> personagens;
     // Atraves do polimorfismo será feito os filtros e movimentações separados;
@@ -25,10 +22,6 @@ public class Tela extends JPanel {
     public Tela() {
         this.setBackground(Color.white);
         this.personagens = new HashSet<>();
-
-        //TODO preciso ser melhorado
-        //this.aldeoes = new HashSet<>();
-        //this.cavaleiros = new HashSet<>();
     }
 
     /**
@@ -41,12 +34,6 @@ public class Tela extends JPanel {
 
         this.personagens.forEach(personagens -> personagens.desenhar(g, this));
         g.dispose();
-
-        // === antiga implementação ===
-        // percorrendo a lista de aldeões e pedindo para cada um se desenhar na tela
-        //this.aldeoes.forEach(aldeao -> aldeao.desenhar(g, this));
-        // liberando o contexto gráfico
-        //g.dispose();
 
     }
 
@@ -75,14 +62,8 @@ public class Tela extends JPanel {
         this.personagens.add(arqueiro);
     }
 
-
-
-    /**
-     * Atualiza as coordenadas X ou Y de todos os aldeoes
-     *
-     * @param direcao direcao para movimentar
-     */
-    public void movimentarAldeoes(Direcao direcao) {
+    // Método para movimentar todos os Personagens.
+    public void movimentarPersonagens(Direcao direcao) {
         //TODO preciso ser melhorado
 
         this.personagens.forEach(personagens -> personagens.mover(direcao, this.getWidth(), this.getHeight()));
@@ -91,17 +72,30 @@ public class Tela extends JPanel {
         this.repaint();
     }
 
-    /**
-     * Altera o estado do aldeão de atacando para não atacando e vice-versa
-     */
-    public void atacarAldeoes() {
+    // Método para movimento os personagens por tipos.
+    public void movimentarTipos(Direcao direcao, Class<? extends Personagem> tipo) {
+        this.personagens
+                .stream().filter(p -> tipo.isInstance(p))
+                .forEach(p -> p.mover(direcao, this.getWidth(), this.getHeight()));
+        this.repaint();
+    }
 
-        //TODO preciso ser melhorado
+    // Método de ataque geral.
+    public void atacarGeral() {
 
-        // Percorrendo a lista de aldeões e pedindo para todos atacarem
-        //this.aldeoes.forEach(Aldeao::atacar);
+        // Percorre a lista de personagens, método de atacar geral.
+        this.personagens.forEach(Personagem::alterAtaque);
 
         // Fazendo o JPanel ser redesenhado
         this.repaint();
     }
+
+    // Método de ataque por tipo de personagem.
+    public void atacarTipos(Class<? extends Personagem> tipo) {
+        this.personagens.stream()
+                .filter(p -> tipo.isInstance(p))
+                .forEach(Personagem::alterAtaque);
+        this.repaint();
+    }
+
 }
