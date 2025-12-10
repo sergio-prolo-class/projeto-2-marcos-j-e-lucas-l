@@ -2,11 +2,14 @@
 
 Todas funcionalidades obrigatória descritas no site foram implemtadas.
 
-<strong>Total de pontos até o momento:</strong> 4/32
+<strong>Total de pontos até o momento:</strong> 11/32
 
 > implementações:
 
-1. Filtro por tipo - Concluido
+1. Filtro por tipo - Concluido.
+2. Ataque básico - Concluído.
+3. Sistema de morte - Concluído.
+3. Barra de vida - Concluído.
 
 ## Exemplo de como ficaram as implementações:
 
@@ -87,9 +90,18 @@ Todas funcionalidades obrigatória descritas no site foram implemtadas.
 
 2. *Arquitetura de Software*
 
+3. *Barra de vida*
+
+4. *Alcance Variável*
+
+5. *Esquiva*
+
 > No momento só;
 
 
 ### 4 pontos - Filtro por tipo
+### 3 pontos - Ataque básico
+### 3 pontos - Sistema de morte
+### 4 pontos - Barra de vida
 
 Adicionado a movimentação dos tipos. Foi criada uma clase chamda `Move` que representa o tipo selecionado, ao ser selecionado outro tipo, e movimentado somente o tipo selecionado;

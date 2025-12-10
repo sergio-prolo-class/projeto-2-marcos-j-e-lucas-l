@@ -2,10 +2,9 @@ package ifsc.joe.ui;
 
 // classe abstrata de personagem;
 import ifsc.joe.domain.Personagem;
+import ifsc.joe.domain.Recursos;
 
-import ifsc.joe.domain.impl.Aldeao;
-import ifsc.joe.domain.impl.Cavaleiro;
-import ifsc.joe.domain.impl.Arqueiro;
+import ifsc.joe.domain.impl.*;
 import ifsc.joe.domain.interfaces.Guerreiro;
 import ifsc.joe.enums.Direcao;
 
@@ -13,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
 import java.util.stream.Collectors;
@@ -23,22 +23,28 @@ public class Tela extends JPanel {
 
     //conforme as atividades do professor, não precisa de varias estruturas de dados para retratar os personagem diferentes;
     private final Set<Personagem> personagens;
+    private final Set<Recursos> recursos;
     // Atraves do polimorfismo será feito os filtros e movimentações separados;
 
     // variável para pegar o tipo selecionado;
     private String filtroAtual;
     private Image imagemFundo;
+    private boolean recursosGerados = false;
 
     public Tela() {
         this.personagens = new HashSet<>();
+        this.recursos = new HashSet<>();
 
         // Por padrão todos os tipo são selecionados;
         this.filtroAtual = Move.TODOS;
 
         // Carrega a imagem de fundo.
         this.imagemFundo = carregarImagemGrama("grama");
+
+        gerarRecursos();
     }
 
+    // Método para criar a grama.
     private Image carregarImagemGrama(String arquivo) {
         try {
             return new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource
@@ -47,6 +53,21 @@ public class Tela extends JPanel {
             System.err.println("Erro ao carregar imagem de fundo: " + arquivo);
             return null;
         }
+    }
+
+    // Método para gerar recursos em lugares aleatórios nos 10% superior e inferior do mapa.
+    private void gerarRecursos() {
+        Random random = new Random();
+        int quantidade = Recursos.getQuantidade();
+
+        for (int i = 0; i < quantidade; i++) {
+            int posX = 50 + random.nextInt(Math.max(1, getWidth() - 100));
+            int posY = random.nextBoolean()
+                    ? random.nextInt(Math.max(1, (int)(getHeight() * 0.1)))
+                    : (int)(getHeight() * 0.9) + random.nextInt(Math.max(1, (int)(getHeight() * 0.1)));
+            recursos.add(new Madeira(posX, posY));
+        }
+
     }
 
     /**
