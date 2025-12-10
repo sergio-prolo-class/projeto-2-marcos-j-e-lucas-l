@@ -6,6 +6,7 @@ import ifsc.joe.domain.Personagem;
 import ifsc.joe.domain.impl.Aldeao;
 import ifsc.joe.domain.impl.Cavaleiro;
 import ifsc.joe.domain.impl.Arqueiro;
+import ifsc.joe.domain.interfaces.Guerreiro;
 import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
@@ -20,9 +21,6 @@ import java.time.format.DateTimeFormatter;
 
 public class Tela extends JPanel {
 
-    //private final Set<Aldeao> aldeoes;
-    //private final Set<Cavaleiro> cavaleiros;
-
     //conforme as atividades do professor, não precisa de varias estruturas de dados para retratar os personagem diferentes;
     private final Set<Personagem> personagens;
     // Atraves do polimorfismo será feito os filtros e movimentações separados;
@@ -36,10 +34,6 @@ public class Tela extends JPanel {
 
         // Por padrão todos os tipo são selecionados;
         this.filtroAtual = Move.TODOS;
-
-        //TODO preciso ser melhorado
-        //this.aldeoes = new HashSet<>();
-        //this.cavaleiros = new HashSet<>();
     }
 
     /**
@@ -52,12 +46,6 @@ public class Tela extends JPanel {
 
         this.personagens.forEach(personagens -> personagens.desenhar(g, this));
         g.dispose();
-
-        // === antiga implementação ===
-        // percorrendo a lista de aldeões e pedindo para cada um se desenhar na tela
-        //this.aldeoes.forEach(aldeao -> aldeao.desenhar(g, this));
-        // liberando o contexto gráfico
-        //g.dispose();
 
     }
 
@@ -141,20 +129,61 @@ public class Tela extends JPanel {
     // }
 
 
-    /**
-     * Altera o estado do aldeão de atacando para não atacando e vice-versa
-     */
-    public void atacarAldeoes() {
-        Set<Personagem> personagensFiltrados = getPersonagensFiltrados();
+    // Método para movimento os personagens por tipos.
+    //public void movimentarTipos(Direcao direcao, Class<? extends Personagem> tipo) {
+      //  this.personagens
+        //        .stream().filter(p -> tipo.isInstance(p))
+          //      .forEach(p -> p.mover(direcao, this.getWidth(), this.getHeight()));
+        //this.repaint();
+    //}
 
-        personagensFiltrados.forEach(Personagem::alterAtaque);
+    // Guerreiros atacam unidades próximas causando dano a elas.
+    public void combate() {
+        personagens.removeIf(Personagem::estaMorto);
 
-        //TODO preciso ser melhorado
+        personagens.stream()
+                .filter(p -> p instanceof Guerreiro)
+                .forEach(atacante -> {
+                    Guerreiro guerreiro = (Guerreiro) atacante;
 
-        // Percorrendo a lista de aldeões e pedindo para todos atacarem
-        //this.aldeoes.forEach(Aldeao::atacar);
+                    Personagem alvoMaisProximo = personagens. stream()
+                            .filter(p -> p != atacante)
+                            .filter(p -> ! p.estaMorto())
+                            . min((p1, p2) -> Double.compare(
+                                    atacante.distanciaAlvo(p1),
+                                    atacante.distanciaAlvo(p2)
+                            ))
+                            .orElse(null);
+                    if (alvoMaisProximo != null) {
+                        guerreiro.ataque(alvoMaisProximo);
+                    }
+                });
+        this.repaint();
+    }
 
-        // Fazendo o JPanel ser redesenhado
+    // Combate por diferenciação de tipo.
+    public void combatePorTipo (Class<? extends Personagem> tipo) {
+        personagens.removeIf(Personagem::estaMorto);
+
+        personagens.stream()
+                .filter(tipo::isInstance)
+                .filter(p -> p instanceof Guerreiro)
+                .forEach(atacante -> {
+                    Guerreiro guerreiro = (Guerreiro) atacante;
+
+                    Personagem alvoMaisProximo = personagens.stream()
+                            .filter(p -> p != atacante)
+                            .filter(p -> !p.estaMorto())
+                            .min((p1, p2) -> Double.compare(
+                                    atacante.distanciaAlvo(p1),
+                                    atacante.distanciaAlvo(p2)
+                            ))
+                            .orElse(null);
+
+                    if (alvoMaisProximo != null) {
+                        guerreiro.ataque(alvoMaisProximo);
+                    }
+                });
         this.repaint();
     }
 

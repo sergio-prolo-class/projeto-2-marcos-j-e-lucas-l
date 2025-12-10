@@ -1,5 +1,8 @@
 package ifsc.joe.ui;
 
+import ifsc.joe.domain.impl.Aldeao;
+import ifsc.joe.domain.impl.Arqueiro;
+import ifsc.joe.domain.impl.Cavaleiro;
 import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
@@ -114,9 +117,9 @@ public class PainelControles {
     /**
      * Configura o listener do botão de ataque
      */
-    private void configurarBotaoAtaque() {
-        atacarButton.addActionListener(e -> getTela().atacarAldeoes());
-    }
+    // private void configurarBotaoAtaque() {
+    //     atacarButton.addActionListener(e -> getTela().atacarAldeoes());
+    // }
 
     /**
      * Cria um personagens em posição aleatória na tela.
@@ -145,16 +148,26 @@ public class PainelControles {
         getTela().criarArqueiro(posX, posY);
     }
 
-    /**
-     * Exibe mensagem informando que a funcionalidade ainda não foi implementada.
-     */
-    private void mostrarMensagemNaoImplementado(String funcionalidade) {
-        JOptionPane.showMessageDialog(
-                painelPrincipal,
-                "Preciso ser implementado",
-                funcionalidade,
-                JOptionPane.INFORMATION_MESSAGE
-        );
+    // private void configurarBotoesCriacao() {
+    //     bCriaAldeao.addActionListener(e -> criarAldeaoAleatorio());
+    //     bCriaArqueiro.addActionListener(e -> criarArqueiroAleatorio());
+    //     bCriaCavaleiro.addActionListener(e -> criarCavaleiroAleatorio());
+    // }
+
+    private void atacarPersonagens() {
+        if (todosRadioButton.isSelected()) {
+            getTela().combate();
+        } else if (aldeaoRadioButton.isSelected()) {
+            getTela().combatePorTipo(Aldeao.class);
+        } else if (arqueiroRadioButton.isSelected()) {
+            getTela().combatePorTipo(Arqueiro.class);
+        } else if (cavaleiroRadioButton.isSelected()) {
+            getTela().combatePorTipo(Cavaleiro.class);
+        }
+    }
+
+    private void configurarBotaoAtaque() {
+        atacarButton.addActionListener(e -> atacarPersonagens());
     }
 
     /**

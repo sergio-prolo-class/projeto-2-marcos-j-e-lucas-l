@@ -11,6 +11,8 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
     // Seus atributos
     public static final String NOME_IMAGEM = "cavaleiro";
     private static final int FORCA_ATAQUE = 25;
+    private static final int DEFESA = 10;
+    private static final int ALCANCE_ATAQUE = 50;
     private static final int VELOCIDADE_MOVIMENTO = 15;
     private static final String TIPO_MONTARIA = "Cavalo";
 
@@ -37,6 +39,40 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
     }
 
     @Override
+    public boolean ataque (Personagem alvo) {
+        if (alvo == null || alvo.estaMorto()) {
+            return false;
+        } else if (distanciaAlvo(alvo) > ALCANCE_ATAQUE) {
+            System.out.println("Alvo fora de alcance!");
+            return false;
+        }
+
+        alterAtaque();
+
+        int danoFinal = FORCA_ATAQUE;
+
+        if (alvo instanceof Guerreiro) {
+            danoFinal = ((Guerreiro) alvo).defender(FORCA_ATAQUE);
+        }
+
+        alvo.receberDano(danoFinal);
+        System.out.println("Cavaleiro causou " + danoFinal + " de dano.");
+        return true;
+    }
+
+    @Override
+    public int defender (int dano) {
+        int danoReduzido = Math.max(0, dano - DEFESA);
+        System.out.println("Cavaleiro defendeu! Dano: " + dano + " -> " + danoReduzido);
+        return danoReduzido;
+    }
+
+    @Override
+    public int getAlcanceAtaque() {
+        return ALCANCE_ATAQUE;
+    }
+
+    @Override
     public String getTipoDeMontaria() {
         return TIPO_MONTARIA;
     }
@@ -46,9 +82,4 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
         return VELOCIDADE_MOVIMENTO;
     }
 
-
-    @Override 
-    public void defender(){
-        System.out.println("ataque defendido");
-    }
 }
