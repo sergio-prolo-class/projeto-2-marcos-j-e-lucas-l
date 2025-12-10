@@ -12,6 +12,7 @@ import ifsc.joe.enums.Direcao;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import java.util.stream.Collectors;
@@ -26,36 +27,49 @@ public class Tela extends JPanel {
 
     // variável para pegar o tipo selecionado;
     private String filtroAtual;
+    private Image imagemFundo;
 
     public Tela() {
-        this.setBackground(Color.white);
         this.personagens = new HashSet<>();
 
         // Por padrão todos os tipo são selecionados;
         this.filtroAtual = Move.TODOS;
 
-        //TODO preciso ser melhorado
-        //this.aldeoes = new HashSet<>();
-        //this.cavaleiros = new HashSet<>();
+        // Carrega a imagem de fundo.
+        this.imagemFundo = carregarImagemGrama("grama");
+    }
+
+    private Image carregarImagemGrama(String arquivo) {
+        try {
+            return new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource
+                    ("./" + arquivo + ".png"))).getImage();
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar imagem de fundo: " + arquivo);
+            return null;
+        }
     }
 
     /**
      * Method que invocado sempre que o JPanel precisa ser resenhado.
      * @param g Graphics componente de java.awt
      */
+
+    // Método para fazer a imagem de fundo.
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // Faz a imagem de fundo.
+        if (imagemFundo != null) {
+            g.drawImage(imagemFundo, 0, 0, getWidth(), getHeight(), null);
+        } else {
+            setBackground(Color.WHITE);
+        }
+        this.personagens.forEach(personagem -> personagem.desenhar(g, this));
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-
-        this.personagens.forEach(personagens -> personagens.desenhar(g, this));
-        g.dispose();
-
-        // === antiga implementação ===
-        // percorrendo a lista de aldeões e pedindo para cada um se desenhar na tela
-        //this.aldeoes.forEach(aldeao -> aldeao.desenhar(g, this));
-        // liberando o contexto gráfico
-        //g.dispose();
-
     }
 
     /**
