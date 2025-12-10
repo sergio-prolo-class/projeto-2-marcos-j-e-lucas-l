@@ -6,6 +6,7 @@ import ifsc.joe.domain.Personagem;
 import ifsc.joe.domain.impl.Aldeao;
 import ifsc.joe.domain.impl.Cavaleiro;
 import ifsc.joe.domain.impl.Arqueiro;
+import ifsc.joe.domain.interfaces.Guerreiro;
 import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
@@ -16,12 +17,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Tela extends JPanel {
-
-    //private final Set<Aldeao> aldeoes;
-    //private final Set<Cavaleiro> cavaleiros;
 
     //conforme as atividades do professor, não precisa de varias estruturas de dados para retratar os personagem diferentes;
     private final Set<Personagem> personagens;
@@ -140,21 +137,53 @@ public class Tela extends JPanel {
     //     this.repaint();
     // }
 
+    // Guerreiros atacam unidades próximas causando dano a elas.
+    public void combate() {
+        personagens.removeIf(Personagem::estaMorto);
 
-    /**
-     * Altera o estado do aldeão de atacando para não atacando e vice-versa
-     */
-    public void atacarAldeoes() {
-        Set<Personagem> personagensFiltrados = getPersonagensFiltrados();
+        personagens.stream()
+                .filter(p -> p instanceof Guerreiro)
+                .forEach(atacante -> {
+                    Guerreiro guerreiro = (Guerreiro) atacante;
 
-        personagensFiltrados.forEach(Personagem::alterAtaque);
+                    Personagem alvoMaisProximo = personagens. stream()
+                            .filter(p -> p != atacante)
+                            .filter(p -> ! p.estaMorto())
+                            . min((p1, p2) -> Double.compare(
+                                    atacante.distanciaAlvo(p1),
+                                    atacante.distanciaAlvo(p2)
+                            ))
+                            .orElse(null);
+                    if (alvoMaisProximo != null) {
+                        guerreiro.ataque(alvoMaisProximo);
+                    }
+                });
+        this.repaint();
+    }
 
-        //TODO preciso ser melhorado
+    // Combate por diferenciação de tipo.
+    public void combatePorTipo (Class<? extends Personagem> tipo) {
+        personagens.removeIf(Personagem::estaMorto);
 
-        // Percorrendo a lista de aldeões e pedindo para todos atacarem
-        //this.aldeoes.forEach(Aldeao::atacar);
+        personagens.stream()
+                .filter(tipo::isInstance)
+                .filter(p -> p instanceof Guerreiro)
+                .forEach(atacante -> {
+                    Guerreiro guerreiro = (Guerreiro) atacante;
 
-        // Fazendo o JPanel ser redesenhado
+                    Personagem alvoMaisProximo = personagens.stream()
+                            .filter(p -> p != atacante)
+                            .filter(p -> !p.estaMorto())
+                            .min((p1, p2) -> Double.compare(
+                                    atacante.distanciaAlvo(p1),
+                                    atacante.distanciaAlvo(p2)
+                            ))
+                            .orElse(null);
+
+                    if (alvoMaisProximo != null) {
+                        guerreiro.ataque(alvoMaisProximo);
+                    }
+                });
         this.repaint();
     }
 

@@ -1,5 +1,8 @@
 package ifsc.joe.ui;
 
+import ifsc.joe.domain.impl.Aldeao;
+import ifsc.joe.domain.impl.Arqueiro;
+import ifsc.joe.domain.impl.Cavaleiro;
 import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
@@ -115,7 +118,19 @@ public class PainelControles {
      * Configura o listener do botão de ataque
      */
     private void configurarBotaoAtaque() {
-        atacarButton.addActionListener(e -> getTela().atacarAldeoes());
+        atacarButton.addActionListener(e -> atacarPersonagens());
+    }
+
+    private void atacarPersonagens() {
+        if (todosRadioButton.isSelected()) {
+            getTela().combate();
+        } else if (aldeaoRadioButton.isSelected()) {
+            getTela().combatePorTipo(Aldeao.class);
+        } else if (arqueiroRadioButton.isSelected()) {
+            getTela().combatePorTipo(Arqueiro.class);
+        } else if (cavaleiroRadioButton.isSelected()) {
+            getTela().combatePorTipo(Cavaleiro.class);
+        }
     }
 
     /**
