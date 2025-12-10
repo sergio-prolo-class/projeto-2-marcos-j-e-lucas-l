@@ -18,6 +18,8 @@ public abstract class Personagem {
     protected boolean atacando;
     protected Image icone;
     protected String nomeImagem;
+    protected int vida;
+    protected static final int VIDATOTAL = 100;
 
     public Personagem(int x, int y, String nomeImagem) {
         this.posX = x;
@@ -25,16 +27,39 @@ public abstract class Personagem {
         this.nomeImagem = nomeImagem;
         this.icone = this.carregarImagem(nomeImagem);
         this.atacando = false;
+        this.vida = VIDATOTAL;
+    }
+
+    // Método para construir a barra de vida.
+    private void barraVida(Graphics g) {
+        int larguraBarra = 40;
+        int alturaBarra = 5;
+        int offsetY = -10;
+
+        // Barra vermelha de borda
+        g.setColor(Color.RED);
+        g.fillRect(posX, posY + offsetY, larguraBarra, alturaBarra);
+
+        // Barra verde de vida.
+        int larguraVida = (int) ((double) vida / VIDATOTAL * larguraBarra);
+        g.setColor(Color.GREEN);
+        g.fillRect(posX, posY + offsetY, larguraVida, alturaBarra);
+
+        // Borda preta.
+        g.setColor(Color.BLACK);
+        g.drawRect(posX, posY + offsetY, larguraBarra, alturaBarra);
+
     }
 
     public void desenhar(Graphics g, JPanel painel) {
         this.icone = this.carregarImagem(nomeImagem + (atacando ? "2" : ""));
         g.drawImage(this.icone, this.posX, this.posY, painel);
+
+        barraVida(g);
     }
 
     public void mover(Direcao direcao, int maxLargura, int maxAltura) {
         int velocidade = getVelocidadeBase();
-
 
         switch (direcao) {
             case CIMA     -> this.posY -= velocidade;
@@ -49,6 +74,21 @@ public abstract class Personagem {
 
     public void alterAtaque() {
         this.atacando = !this.atacando;
+    }
+
+    public void receberDano (int dano) {
+        this.vida = Math.max(0, this.vida - dano);
+        System.out.println(nomeImagem + " recebeu " + dano + " de dano. Vida: " + vida);
+    }
+
+    public boolean estaMorto() {
+        return vida <= 0;
+    }
+
+    public double distanciaAlvo(Personagem alvo) {
+        int dx = this.posX - alvo.posX;
+        int dy = this.posY - alvo.posY;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     protected int getVelocidadeBase() {
@@ -74,6 +114,11 @@ public abstract class Personagem {
     public boolean estaAtacando() {
         return atacando;
     }
+
+    public int getVida() {
+        return vida;
+    }
+
 }
 
 // class que foi usada como base para implementar a personagem:

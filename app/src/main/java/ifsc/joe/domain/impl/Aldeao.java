@@ -26,7 +26,4 @@ public class Aldeao extends Personagem implements Coletador {
         System.out.println("Aldeão coletando recursos...");
     }
 
-    public void atacar() {
-        alterAtaque();
-    }
 }

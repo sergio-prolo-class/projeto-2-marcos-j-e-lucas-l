@@ -6,6 +6,7 @@ import ifsc.joe.domain.Personagem;
 import ifsc.joe.domain.impl.Aldeao;
 import ifsc.joe.domain.impl.Cavaleiro;
 import ifsc.joe.domain.impl.Arqueiro;
+import ifsc.joe.domain.interfaces.Guerreiro;
 import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
@@ -80,21 +81,53 @@ public class Tela extends JPanel {
         this.repaint();
     }
 
-    // Método de ataque geral.
-    public void atacarGeral() {
+    // Guerreiros atacam unidades próximas causando dano a elas.
+    public void combate() {
+        personagens.removeIf(Personagem::estaMorto);
 
-        // Percorre a lista de personagens, método de atacar geral.
-        this.personagens.forEach(Personagem::alterAtaque);
+        personagens.stream()
+                .filter(p -> p instanceof Guerreiro)
+                .forEach(atacante -> {
+                    Guerreiro guerreiro = (Guerreiro) atacante;
 
-        // Fazendo o JPanel ser redesenhado
+                    Personagem alvoMaisProximo = personagens. stream()
+                            .filter(p -> p != atacante)
+                            .filter(p -> ! p.estaMorto())
+                            . min((p1, p2) -> Double.compare(
+                                    atacante.distanciaAlvo(p1),
+                                    atacante.distanciaAlvo(p2)
+                            ))
+                            .orElse(null);
+                    if (alvoMaisProximo != null) {
+                        guerreiro.ataque(alvoMaisProximo);
+                    }
+                });
         this.repaint();
     }
 
-    // Método de ataque por tipo de personagem.
-    public void atacarTipos(Class<? extends Personagem> tipo) {
-        this.personagens.stream()
-                .filter(p -> tipo.isInstance(p))
-                .forEach(Personagem::alterAtaque);
+    // Combate por diferenciação de tipo.
+    public void combatePorTipo (Class<? extends Personagem> tipo) {
+        personagens.removeIf(Personagem::estaMorto);
+
+        personagens.stream()
+                .filter(tipo::isInstance)
+                .filter(p -> p instanceof Guerreiro)
+                .forEach(atacante -> {
+                    Guerreiro guerreiro = (Guerreiro) atacante;
+
+                    Personagem alvoMaisProximo = personagens.stream()
+                            .filter(p -> p != atacante)
+                            .filter(p -> !p.estaMorto())
+                            .min((p1, p2) -> Double.compare(
+                                    atacante.distanciaAlvo(p1),
+                                    atacante.distanciaAlvo(p2)
+                            ))
+                            .orElse(null);
+
+                    if (alvoMaisProximo != null) {
+                        guerreiro.ataque(alvoMaisProximo);
+                    }
+                });
         this.repaint();
     }
 

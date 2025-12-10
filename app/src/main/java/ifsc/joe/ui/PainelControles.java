@@ -103,30 +103,18 @@ public class PainelControles {
 
     private void atacarPersonagens() {
         if (todosRadioButton.isSelected()) {
-            getTela().atacarGeral();
+            getTela().combate();
         } else if (aldeaoRadioButton.isSelected()) {
-            getTela().atacarTipos(Aldeao.class);
+            getTela().combatePorTipo(Aldeao.class);
         } else if (arqueiroRadioButton.isSelected()) {
-            getTela().atacarTipos(Arqueiro.class);
+            getTela().combatePorTipo(Arqueiro.class);
         } else if (cavaleiroRadioButton.isSelected()) {
-            getTela().atacarTipos(Cavaleiro.class);
+            getTela().combatePorTipo(Cavaleiro.class);
         }
     }
 
     private void configurarBotaoAtaque() {
         atacarButton.addActionListener(e -> atacarPersonagens());
-    }
-
-    /**
-     * Exibe mensagem informando que a funcionalidade ainda não foi implementada.
-     */
-    private void mostrarMensagemNaoImplementado(String funcionalidade) {
-        JOptionPane.showMessageDialog(
-                painelPrincipal,
-                "Preciso ser implementado",
-                funcionalidade,
-                JOptionPane.INFORMATION_MESSAGE
-        );
     }
 
     /**
