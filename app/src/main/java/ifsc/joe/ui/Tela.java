@@ -10,6 +10,8 @@ import ifsc.joe.enums.Direcao;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Random;
@@ -31,6 +33,12 @@ public class Tela extends JPanel {
     private Image imagemFundo;
     private boolean recursosGerados = false;
 
+    // Constantes para o tamanho dos recursos:
+    private static final int LARGURA_RECURSO = 40;
+    private static final int ALTURA_RECURSO = 40;
+    private static final int DISTANCIA_MINIMA = 35;
+    private static final int MARGEM_BORDA = 20;
+
     public Tela() {
         this.personagens = new HashSet<>();
         this.recursos = new HashSet<>();
@@ -41,7 +49,18 @@ public class Tela extends JPanel {
         // Carrega a imagem de fundo.
         this.imagemFundo = carregarImagemGrama("grama");
 
-        gerarRecursos();
+        // Listener que espera o painel ter tamanho.
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (! recursosGerados && getWidth() > 0 && getHeight() > 0) {
+                    gerarRecursos();
+                    recursosGerados = true;
+                    System.out.println("Recursos gerados com sucesso!  Largura: " + getWidth() + " Altura: " + getHeight());
+                }
+            }
+        });
+
     }
 
     // Método para criar a grama.
@@ -59,15 +78,88 @@ public class Tela extends JPanel {
     private void gerarRecursos() {
         Random random = new Random();
         int quantidade = Recursos.getQuantidade();
+        int tentativasMaximas = 500; // Recurso para evitar loop infinito.
 
+        // Gera 15 tábuas
         for (int i = 0; i < quantidade; i++) {
-            int posX = 50 + random.nextInt(Math.max(1, getWidth() - 100));
-            int posY = random.nextBoolean()
-                    ? random.nextInt(Math.max(1, (int)(getHeight() * 0.1)))
-                    : (int)(getHeight() * 0.9) + random.nextInt(Math.max(1, (int)(getHeight() * 0.1)));
-            recursos.add(new Madeira(posX, posY));
+            Madeira madeira = antiColisao(random, tentativasMaximas, Madeira.class);
+            if (madeira != null) {
+                recursos.add(madeira);
+            }
         }
 
+        // Gera 15 Ouros
+        for (int i = 0; i < quantidade; i++) {
+            Ouro ouro = antiColisao(random, tentativasMaximas, Ouro.class);
+            if (ouro != null) {
+                recursos.add(ouro);
+            }
+        }
+
+        // Gera 15 Trigos.
+        for (int i = 0; i < quantidade; i++) {
+            Trigo trigo = antiColisao(random, tentativasMaximas, Trigo. class);
+            if (trigo != null) {
+                recursos. add(trigo);
+            }
+        }
+
+        System.out.println("Recursos gerados: " + recursos.size() + " (15 Madeiras, 15 Ouros, 15 Trigos)");
+    }
+
+    // Método para os recursos não ficarem um em cima do outro.
+    private <T extends Recursos> T antiColisao (Random random, int tentativasMaximas, Class<T> tipoRecurso) {
+        for (int tentativa = 0; tentativa < tentativasMaximas; tentativa++) {
+            // Calcula a área utilizável com margem.
+            int larguraUtil = getWidth() - (2 * MARGEM_BORDA) - LARGURA_RECURSO;
+            int alturaZona = (int)(getHeight() * 0.15);  // Aumentado de 0.1 para 0.15 (15% em vez de 10%)
+
+            // posX aleatória.
+            int posX = MARGEM_BORDA + random.nextInt(Math.max(1, larguraUtil));
+
+            // posY nos 15% superior ou inferior.
+            int posY;
+            if (random.nextBoolean()) {
+                // 15% superior
+                posY = MARGEM_BORDA + random.nextInt(Math.max(1, alturaZona - MARGEM_BORDA));
+            } else {
+                // 15% inferior
+                int inicioZonaInferior = (int)(getHeight() * 0.85);  // Mudado de 0.9 para 0.85
+                int espacoDisponivel = getHeight() - inicioZonaInferior - MARGEM_BORDA - ALTURA_RECURSO;
+                posY = inicioZonaInferior + random.nextInt(Math.max(1, espacoDisponivel));
+            }
+
+            // Verifica colisão
+            if (! verificaColisao(posX, posY)) {
+                try {
+                    if (tipoRecurso == Madeira.class) {
+                        return tipoRecurso.cast(new Madeira(posX, posY));
+                    } else if (tipoRecurso == Ouro.class) {
+                        return tipoRecurso. cast(new Ouro(posX, posY));
+                    } else if (tipoRecurso == Trigo.class) {
+                        return tipoRecurso.cast(new Trigo(posX, posY));
+                    }
+                } catch (Exception e) {
+                    System.err.println("Erro ao criar recurso: " + e.getMessage());
+                }
+            }
+        }
+        System.out.println("FALHA:  Não foi possível posicionar " + tipoRecurso.getSimpleName() + " após " + tentativasMaximas + " tentativas");
+        return null;
+    }
+
+    private boolean verificaColisao(int novoX, int novoY) {
+        for (Recursos recurso : recursos) {
+            int distanciaX = Math.abs(recurso.getPosX() - novoX);
+            int distanciaY = Math.abs(recurso.getPosY() - novoY);
+
+            double distancia = Math.sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
+
+            if (distancia < DISTANCIA_MINIMA) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -85,6 +177,10 @@ public class Tela extends JPanel {
         } else {
             setBackground(Color.WHITE);
         }
+
+        // Desenha os recursos.
+        this.recursos.forEach(recurso -> recurso.desenhar(g, this));
+        // Desenha os personagens.
         this.personagens.forEach(personagem -> personagem.desenhar(g, this));
     }
 
@@ -155,8 +251,8 @@ public class Tela extends JPanel {
     public void movimentarPersonagens(Direcao direcao) {
         Set<Personagem> personagensFiltrados = getPersonagensFiltrados();
 
-        personagensFiltrados.forEach(personagem -> 
-            personagem.mover(direcao, this.getWidth(), this.getHeight())
+        personagensFiltrados.forEach(personagem ->
+                personagem.mover(direcao, this.getWidth(), this.getHeight())
         );
         this.repaint();
 

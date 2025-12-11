@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public abstract class Recursos {
 
-    protected static final int QUANTIDADE = 15;
+    protected static final int QUANTIDADE = 10;
     protected int posX, posY;
     protected Image icone;
     protected String nomeImagem;
