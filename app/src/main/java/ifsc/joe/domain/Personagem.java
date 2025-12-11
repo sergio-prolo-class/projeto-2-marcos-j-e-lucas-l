@@ -51,7 +51,7 @@ public abstract class Personagem {
         g.fillRect(posX, posY + offsetY, larguraBarra, alturaBarra);
 
         // Barra verde de vida.
-        int larguraVida = (int) ((double) VIDATOTAL / vida * larguraBarra);
+        int larguraVida = (int) ((double) vida / VIDATOTAL  * larguraBarra);
         g.setColor(Color.GREEN);
         g.fillRect(posX, posY + offsetY, larguraVida, alturaBarra);
 
