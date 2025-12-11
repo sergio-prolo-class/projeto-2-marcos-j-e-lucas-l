@@ -6,15 +6,20 @@ import ifsc.joe.domain.interfaces.Guerreiro;
 // implementação do arqueiro;
 // bem enxuta 
 
+// Configurações padões, centralizar todas;
+//import ifsc.joe.config.ConfiguracaoJogo;
+
 public class Arqueiro extends Personagem implements Guerreiro {
 
-    public static final String NOME_IMAGEM = "arqueiro";
-    private static final int FORCA_ATAQUE = 15;
-    private static final int DEFESA = 5;
-    private static final int ALCANCE_ATAQUE = 150;
+    public static final String NOME_IMAGEM = config.getArqueiroImagemNome();
+    private static final int FORCA_ATAQUE = config.getArqueiroForcaAtaque();
+    private static final int DEFESA = config.getArqueiroDefesa();
+    private static final int ALCANCE_ATAQUE = config.getArqueiroAlcance();
+    private static final int VIDATOTAL = config.getArqueiroVidaInicial();
+    private static final int VELOCIDADE_MOVIMENTO = config.getArqueiroVelocidade();
 
     public Arqueiro(int x, int y) {
-        super(x, y, NOME_IMAGEM);
+        super(x, y, NOME_IMAGEM, VIDATOTAL, VELOCIDADE_MOVIMENTO);
     }
 
     // Implementação dos métodos das interfaces:

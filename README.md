@@ -2,7 +2,7 @@
 
 Todas funcionalidades obrigatória descritas no site foram implemtadas.
 
-<strong>Total de pontos até o momento:</strong> 11/32
+<strong>Total de pontos até o momento:</strong> 14/32
 
 > implementações:
 
@@ -10,6 +10,7 @@ Todas funcionalidades obrigatória descritas no site foram implemtadas.
 2. Ataque básico - Concluído.
 3. Sistema de morte - Concluído.
 3. Barra de vida - Concluído.
+4. Arquivo de configurações - Concluido.
 
 ## Exemplo de como ficaram as implementações:
 
@@ -100,8 +101,26 @@ Todas funcionalidades obrigatória descritas no site foram implemtadas.
 
 
 ### 4 pontos - Filtro por tipo
+Adicionado a movimentação dos tipos. Foi criada uma clase chamda `Move` que representa o tipo selecionado, ao ser selecionado outro tipo, e movimentado somente o tipo selecionado;
+
+
 ### 3 pontos - Ataque básico
+
+<strong>Descreva o que você fez...</strong> @Lucas
+
 ### 3 pontos - Sistema de morte
+
+<strong>Descreva o que você fez...</strong>@Lucas
+
 ### 4 pontos - Barra de vida
 
-Adicionado a movimentação dos tipos. Foi criada uma clase chamda `Move` que representa o tipo selecionado, ao ser selecionado outro tipo, e movimentado somente o tipo selecionado;
+<strong>Descreva o que você fez...</strong> @Lucas
+
+
+### 3 pontos – Arquivo de configurações
+
+Foi adicionado o arquivo `joe.properties` [ver arquivo](./app/src/main/resources/joe.properties), contendo todos os valores padrão do jogo. Qualquer alteração feita nesse arquivo será refletida automaticamente em todos os pontos onde esses valores são utilizados.
+
+Para carregar esses dados, foi criada a classe `ConfiguracaoJogo.java` [ver arquivo](./app/src/main/java/ifsc/joe/config/ConfiguracaoJogo.java). Ela é responsável por ler o arquivo de configuração e disponibilizar getters para acesso aos valores nas demais classes do projeto.
+
+> Para mais informaões de como adicionar novos valores [ver documentação](./app/src/main/java/ifsc/joe/config/docs.md)

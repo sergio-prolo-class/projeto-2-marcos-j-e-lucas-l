@@ -8,14 +8,21 @@ import ifsc.joe.enums.Direcao;
 import javax.swing.*;
 import java.util.Random;
 
+import ifsc.joe.config.ConfiguracaoJogo;
+
 /**
  * Classe responsável por gerenciar os controles e interações da interface.
  * Conecta os componentes visuais com a lógica do jogo (Tela).
  */
 public class PainelControles {
 
+
     private final Random sorteio;
     private Tela tela;
+
+    // valores da configuração;
+    private final ConfiguracaoJogo config = new ConfiguracaoJogo();
+    private final int PADDING =  config.getPersonagemPadding();
 
     // Componentes da interface (gerados pelo Form Designer)
     private JPanel painelPrincipal;
@@ -137,7 +144,7 @@ public class PainelControles {
      * Cria um personagens em posição aleatória na tela.
      */
     private void criarAldeaoAleatorio() {
-        final int PADDING = 50;
+        //final int PADDING = 50;
         int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
         int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
 
@@ -145,7 +152,7 @@ public class PainelControles {
     }
 
     private void criarCavaleiroAleatorio() {
-        final int PADDING = 50;
+        //final int PADDING = 50;
         int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
         int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
 
@@ -153,7 +160,7 @@ public class PainelControles {
     }
 
     private void criarArqueiroAleatorio() {
-        final int PADDING = 50;
+        //final int PADDING = 50;
         int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
         int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
 

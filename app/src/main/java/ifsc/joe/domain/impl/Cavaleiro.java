@@ -9,15 +9,17 @@ import ifsc.joe.domain.interfaces.ComMontaria;
 public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
 
     // Seus atributos
-    public static final String NOME_IMAGEM = "cavaleiro";
-    private static final int FORCA_ATAQUE = 25;
-    private static final int DEFESA = 10;
-    private static final int ALCANCE_ATAQUE = 50;
-    private static final int VELOCIDADE_MOVIMENTO = 15;
-    private static final String TIPO_MONTARIA = "Cavalo";
+    public static final String NOME_IMAGEM = config.getCavaleiroImagemNome(); //"cavaleiro";
+    private static final int FORCA_ATAQUE = config.getCavaleiroForcaAtaque(); //25;
+    private static final int DEFESA = config.getCavaleiroDefesa(); //10;
+    private static final int ALCANCE_ATAQUE = config.getCavaleiroAlcance();//50;
+    private static final int VELOCIDADE_MOVIMENTO = config.getCavaleiroVelocidade();//15;
+    private static final String TIPO_MONTARIA = config.getCavaleiroTipoMontaria();//"Cavalo";
+    private static final int VIDATOTAL = config.getCavaleiroVidaInicial(); //150;
+    
 
     public Cavaleiro(int x, int y) {
-        super(x, y, NOME_IMAGEM);
+        super(x, y, NOME_IMAGEM, VIDATOTAL, VELOCIDADE_MOVIMENTO);
     }
 
     // métodos definidos nas interfaces ;
@@ -77,9 +79,9 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
         return TIPO_MONTARIA;
     }
 
-    @Override
-    protected int getVelocidadeBase() {
-        return VELOCIDADE_MOVIMENTO;
-    }
+    //@Override
+    //protected int getVelocidadeBase() {
+    //    return VELOCIDADE_MOVIMENTO;
+   // }
 
 }

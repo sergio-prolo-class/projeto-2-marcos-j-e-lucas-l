@@ -5,9 +5,14 @@ import javax.swing.*;
 /**
  * Classe responsável pela configuração e exibição da janela principal do jogo.
  */
+
+import ifsc.joe.config.ConfiguracaoJogo;
+
 public class JanelaJogo {
 
-    private static final String TITULO = "Java of Empires";
+    private static final ConfiguracaoJogo config = new ConfiguracaoJogo(); 
+
+    private static final String TITULO = config.getJogoTitulo();//"Java of Empires";
     private final JFrame frame;
     private final PainelControles painelControles;
 

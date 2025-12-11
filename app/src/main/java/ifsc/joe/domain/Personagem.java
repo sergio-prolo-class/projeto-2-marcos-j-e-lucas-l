@@ -8,26 +8,36 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
 
+import ifsc.joe.config.ConfiguracaoJogo;
+
 // Em suma ela é uma cópia da implementação de aldeão feita pelo professor;
 // Foi feito poucas alterações visando futuras implementações nelas;
 
 public abstract class Personagem {
 // Decidir não documentar linha por linha, pois ela é uma copia da aldeão, que está ao final toda escrita como comentarios;
 
+    // classe com todos os valores;
+    // todas as classes podem usar sem precisar instancia-la;
+    public static final ConfiguracaoJogo config = new ConfiguracaoJogo();
+
     protected int posX, posY;
     protected boolean atacando;
     protected Image icone;
     protected String nomeImagem;
     protected int vida;
+    protected int velocidade;
+
+    // Valor padrão definido;
     protected static final int VIDATOTAL = 100;
 
-    public Personagem(int x, int y, String nomeImagem) {
+    public Personagem(int x, int y, String nomeImagem, int vida, int v) {
         this.posX = x;
         this.posY = y;
         this.nomeImagem = nomeImagem;
         this.icone = this.carregarImagem(nomeImagem);
         this.atacando = false;
-        this.vida = VIDATOTAL;
+        this.vida = vida;
+        this.velocidade = v;
     }
 
     // Método para construir a barra de vida.
@@ -41,7 +51,7 @@ public abstract class Personagem {
         g.fillRect(posX, posY + offsetY, larguraBarra, alturaBarra);
 
         // Barra verde de vida.
-        int larguraVida = (int) ((double) vida / VIDATOTAL * larguraBarra);
+        int larguraVida = (int) ((double) VIDATOTAL / vida * larguraBarra);
         g.setColor(Color.GREEN);
         g.fillRect(posX, posY + offsetY, larguraVida, alturaBarra);
 
@@ -59,7 +69,7 @@ public abstract class Personagem {
     }
 
     public void mover(Direcao direcao, int maxLargura, int maxAltura) {
-        int velocidade = getVelocidadeBase();
+        //int velocidade = getVelocidadeBase();
 
         switch (direcao) {
             case CIMA     -> this.posY -= velocidade;
@@ -91,9 +101,9 @@ public abstract class Personagem {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    protected int getVelocidadeBase() {
-        return 10;
-    }
+   // protected int getVelocidadeBase() {
+     //   return 10;
+    //}
 
     private Image carregarImagem(String imagem) {
         return new ImageIcon(Objects.requireNonNull(
