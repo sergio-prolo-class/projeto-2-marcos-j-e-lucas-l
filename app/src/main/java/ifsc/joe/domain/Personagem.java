@@ -58,7 +58,6 @@ public abstract class Personagem {
         // Borda preta.
         g.setColor(Color.BLACK);
         g.drawRect(posX, posY + offsetY, larguraBarra, alturaBarra);
-
     }
 
     public void desenhar(Graphics g, JPanel painel) {

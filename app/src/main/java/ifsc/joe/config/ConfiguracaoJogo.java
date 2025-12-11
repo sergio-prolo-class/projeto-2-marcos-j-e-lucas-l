@@ -11,6 +11,8 @@ import java.util.Properties;
  */
 public class ConfiguracaoJogo {
 
+    private static boolean ready = true;
+
     private static ConfiguracaoJogo instancia;
     private final Properties propriedades;
 
@@ -41,7 +43,12 @@ public class ConfiguracaoJogo {
             }
             
             propriedades.load(input);
+            
+            if(ready){
             System.out.println("Configurações carregadas com sucesso de joe.properties");
+            ready = false;
+            }
+
             
         } catch (IOException e) {
             System.err.println("Erro ao carregar joe.properties: " + e.getMessage());

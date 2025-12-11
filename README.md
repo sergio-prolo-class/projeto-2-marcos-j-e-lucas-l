@@ -2,7 +2,7 @@
 
 Todas funcionalidades obrigatória descritas no site foram implemtadas.
 
-<strong>Total de pontos até o momento:</strong> 14/32
+<strong>Total de pontos até o momento:</strong> 20/32
 
 > implementações:
 
@@ -103,19 +103,23 @@ Todas funcionalidades obrigatória descritas no site foram implemtadas.
 ### 4 pontos - Filtro por tipo
 Adicionado a movimentação dos tipos. Foi criada uma clase chamda `Move` que representa o tipo selecionado, ao ser selecionado outro tipo, e movimentado somente o tipo selecionado;
 
+---
 
 ### 3 pontos - Ataque básico
 
 <strong>Descreva o que você fez...</strong> @Lucas
 
+---
 ### 3 pontos - Sistema de morte
 
 <strong>Descreva o que você fez...</strong>@Lucas
+---
 
 ### 4 pontos - Barra de vida
 
 <strong>Descreva o que você fez...</strong> @Lucas
 
+---
 
 ### 3 pontos – Arquivo de configurações
 
