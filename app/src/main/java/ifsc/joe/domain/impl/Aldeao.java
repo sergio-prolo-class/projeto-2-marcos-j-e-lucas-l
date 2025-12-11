@@ -3,6 +3,7 @@ package ifsc.joe.domain.impl;
 // Essa classe implementa a classe personagem e uma interface;
 import ifsc.joe.domain.Personagem;
 import ifsc.joe.domain.interfaces.Coletador;
+import ifsc.joe.enums.TipoRecurso;
 
 public class Aldeao extends Personagem implements Coletador {
 
@@ -24,6 +25,18 @@ public class Aldeao extends Personagem implements Coletador {
     @Override
     public void coletar() {
         System.out.println("Aldeão coletando recursos...");
+    }
+
+    @Override
+    public boolean podeColetarTipo(TipoRecurso tipo) {
+        // Aldeão coleta trigo e ouro.
+        return tipo == TipoRecurso.TRIGO ||
+                tipo == TipoRecurso.OURO;
+    }
+
+    @Override
+    public int getRaioColeta() {
+        return 50;  // Raio de coleta do aldeão
     }
 
 }

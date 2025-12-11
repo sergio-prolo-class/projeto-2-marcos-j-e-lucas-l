@@ -1,17 +1,17 @@
 package ifsc.joe.domain.impl;
 
 import ifsc.joe.domain.Personagem;
+import ifsc.joe.domain.interfaces.Coletador;
 import ifsc.joe.domain.interfaces.Guerreiro;
+import ifsc.joe.enums.TipoRecurso;
 
-// implementação do arqueiro;
-// bem enxuta 
-
-public class Arqueiro extends Personagem implements Guerreiro {
+public class Arqueiro extends Personagem implements Guerreiro, Coletador {
 
     public static final String NOME_IMAGEM = "arqueiro";
     private static final int FORCA_ATAQUE = 15;
     private static final int DEFESA = 5;
     private static final int ALCANCE_ATAQUE = 150;
+    private static final int CAPACIDADE_COLETA = 10;
 
     public Arqueiro(int x, int y) {
         super(x, y, NOME_IMAGEM);
@@ -50,6 +50,18 @@ public class Arqueiro extends Personagem implements Guerreiro {
     }
 
     @Override
+    public void coletar() {
+        System.out.println("Aldeão coletando recursos...");
+    }
+
+    @Override
+    public boolean podeColetarTipo(TipoRecurso tipo) {
+        // Arqueiro pode coletar COMIDA e MADEIRA
+        return tipo == TipoRecurso.TRIGO ||
+                tipo == TipoRecurso.MADEIRA;
+    }
+
+    @Override
     public int getForcaAtaque(){
         return FORCA_ATAQUE;
     }
@@ -66,4 +78,13 @@ public class Arqueiro extends Personagem implements Guerreiro {
         return ALCANCE_ATAQUE;
     }
 
+    @Override
+    public int getRaioColeta() {
+        return 50;  // Raio de coleta do arqueiro
+    }
+
+    @Override
+    public int getCapacidadeColeta() {
+        return CAPACIDADE_COLETA;
+    }
 }

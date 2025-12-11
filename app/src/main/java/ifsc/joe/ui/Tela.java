@@ -1,10 +1,12 @@
 package ifsc.joe.ui;
 
 // classe abstrata de personagem;
+import ifsc.joe.domain.Estoque;
 import ifsc.joe.domain.Personagem;
 import ifsc.joe.domain.Recursos;
 
 import ifsc.joe.domain.impl.*;
+import ifsc.joe.domain.interfaces.Coletador;
 import ifsc.joe.domain.interfaces.Guerreiro;
 import ifsc.joe.enums.Direcao;
 
@@ -12,10 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import java.util.stream.Collectors;
 
@@ -26,6 +25,7 @@ public class Tela extends JPanel {
     //conforme as atividades do professor, não precisa de varias estruturas de dados para retratar os personagem diferentes;
     private final Set<Personagem> personagens;
     private final Set<Recursos> recursos;
+    private final Estoque estoque;
     // Atraves do polimorfismo será feito os filtros e movimentações separados;
 
     // variável para pegar o tipo selecionado;
@@ -37,11 +37,12 @@ public class Tela extends JPanel {
     private static final int LARGURA_RECURSO = 40;
     private static final int ALTURA_RECURSO = 40;
     private static final int DISTANCIA_MINIMA = 35;
-    private static final int MARGEM_BORDA = 20;
+    private static final int MARGEM_BORDA = 25;
 
     public Tela() {
         this.personagens = new HashSet<>();
         this.recursos = new HashSet<>();
+        this.estoque = new Estoque();
 
         // Por padrão todos os tipo são selecionados;
         this.filtroAtual = Move.TODOS;
@@ -112,7 +113,7 @@ public class Tela extends JPanel {
         for (int tentativa = 0; tentativa < tentativasMaximas; tentativa++) {
             // Calcula a área utilizável com margem.
             int larguraUtil = getWidth() - (2 * MARGEM_BORDA) - LARGURA_RECURSO;
-            int alturaZona = (int)(getHeight() * 0.15);  // Aumentado de 0.1 para 0.15 (15% em vez de 10%)
+            int alturaZona = (int)(getHeight() * 0.2);  // Ocupa 20% da borda superior.
 
             // posX aleatória.
             int posX = MARGEM_BORDA + random.nextInt(Math.max(1, larguraUtil));
@@ -124,7 +125,7 @@ public class Tela extends JPanel {
                 posY = MARGEM_BORDA + random.nextInt(Math.max(1, alturaZona - MARGEM_BORDA));
             } else {
                 // 15% inferior
-                int inicioZonaInferior = (int)(getHeight() * 0.85);  // Mudado de 0.9 para 0.85
+                int inicioZonaInferior = (int)(getHeight() * 0.85);
                 int espacoDisponivel = getHeight() - inicioZonaInferior - MARGEM_BORDA - ALTURA_RECURSO;
                 posY = inicioZonaInferior + random.nextInt(Math.max(1, espacoDisponivel));
             }
@@ -146,6 +147,106 @@ public class Tela extends JPanel {
         }
         System.out.println("FALHA:  Não foi possível posicionar " + tipoRecurso.getSimpleName() + " após " + tentativasMaximas + " tentativas");
         return null;
+    }
+
+    // Método para coletar recursos.
+    public void coletarRecursos() {
+        Set<Personagem> personagensFiltrados = getPersonagensFiltrados();
+
+        // Filtra apenas coletadores
+        Set<Personagem> coletadores = personagensFiltrados.stream()
+                .filter(p -> p instanceof Coletador)
+                .collect(Collectors.toSet());
+
+        if (coletadores.isEmpty()) {
+            System.out.println("⚠ Nenhum coletador selecionado!");
+            return;
+        }
+
+        boolean algumRecursoColetado = false;
+
+        // Para cada coletador
+        for (Personagem personagem : coletadores) {
+            Coletador coletador = (Coletador) personagem;
+
+            // Procura recursos próximos
+            Iterator<Recursos> iterator = recursos.iterator();
+            while (iterator.hasNext()) {
+                Recursos recurso = iterator.next();
+
+                // Verifica se está próximo
+                if (recurso.verificaProximidade(personagem. getPosX(), personagem.getPosY(), coletador.getRaioColeta())) {
+
+                    // Verifica se pode coletar esse tipo
+                    if (coletador.podeColetarTipo(recurso.getTipo())) {
+                        // Adiciona à economia
+                        adicionarRecursoNaEconomia(recurso);
+
+                        // Remove o recurso do mapa
+                        iterator.remove();
+
+                        algumRecursoColetado = true;
+                        System.out.println(personagem.getClass().getSimpleName() + " coletou " + recurso.getTipo());
+
+                        break; // Coleta apenas 1 recurso por vez por personagem
+                    } else {
+                        System.out.println(personagem.getClass().getSimpleName() + " não pode coletar " + recurso.getTipo());
+                    }
+                }
+            }
+        }
+
+        if (!algumRecursoColetado) {
+            System.out.println("Nenhum recurso próximo para coletar!");
+        }
+
+        repaint();
+    }
+
+    private void adicionarRecursoNaEconomia(Recursos recurso) {
+        int quantidadeColetada = 10; // Quantidade fixa por coleta
+
+        switch (recurso.getTipo()) {
+            case MADEIRA:
+                estoque.adicionarMadeira(quantidadeColetada);
+                break;
+            case OURO:
+                estoque.adicionarOuro(quantidadeColetada);
+                break;
+            case TRIGO:
+                estoque.adicionarTrigo(quantidadeColetada);
+                break;
+        }
+    }
+
+    public Estoque getEstoque() {
+        return estoque;
+    }
+
+    private void desenharBarraRecursos(Graphics g) {
+        // Fundo da barra
+        g.setColor(new Color(0, 0, 0, 180)); // Preto semi-transparente
+        g.fillRect(0, 0, getWidth(), 40);
+
+        // Borda
+        g.setColor(Color. YELLOW);
+        g.drawRect(0, 0, getWidth() - 1, 39);
+
+        // Texto dos recursos
+        g.setFont(new Font("Arial", Font. BOLD, 16));
+        g.setColor(Color.WHITE);
+
+        String recursos = String.format("🪵 Madeira: %d     💰 Ouro: %d     🌾 Comida: %d",
+                estoque.getMadeira(),
+                estoque.getOuro(),
+                estoque.getTrigo());
+
+        // Centraliza o texto
+        FontMetrics fm = g.getFontMetrics();
+        int textWidth = fm. stringWidth(recursos);
+        int x = (getWidth() - textWidth) / 2;
+
+        g.drawString(recursos, x, 25);
     }
 
     private boolean verificaColisao(int novoX, int novoY) {
@@ -177,6 +278,8 @@ public class Tela extends JPanel {
         } else {
             setBackground(Color.WHITE);
         }
+
+        desenharBarraRecursos(g);
 
         // Desenha os recursos.
         this.recursos.forEach(recurso -> recurso.desenhar(g, this));
