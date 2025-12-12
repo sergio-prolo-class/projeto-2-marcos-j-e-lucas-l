@@ -20,6 +20,7 @@ public class Arqueiro extends Personagem implements Guerreiro {
 
     public Arqueiro(int x, int y) {
         super(x, y, NOME_IMAGEM, VIDATOTAL, VELOCIDADE_MOVIMENTO);
+       // System.out.println(" Arqueiro criado em ("+ x+ ","+ y +")");
     }
 
     // Implementação dos métodos das interfaces:

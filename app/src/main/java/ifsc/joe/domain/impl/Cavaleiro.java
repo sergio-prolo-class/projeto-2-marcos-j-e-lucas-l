@@ -20,6 +20,7 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
 
     public Cavaleiro(int x, int y) {
         super(x, y, NOME_IMAGEM, VIDATOTAL, VELOCIDADE_MOVIMENTO);
+        //System.out.println(" Cavaleiro criado em ("+ x+ ","+ y +")");
     }
 
     // métodos definidos nas interfaces ;

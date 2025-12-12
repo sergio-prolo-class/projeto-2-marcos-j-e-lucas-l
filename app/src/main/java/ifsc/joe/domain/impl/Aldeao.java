@@ -20,6 +20,7 @@ public class Aldeao extends Personagem implements Coletador {
 
     public Aldeao(int x, int y) {
         super(x, y, NOME_IMAGEM, valorDeVida, velocidadeDeMovimento);
+        //System.out.println(" Aldeão criado em ("+ x+ ","+ y +")");
     }
 
     // Sem muito segredo até aqui;

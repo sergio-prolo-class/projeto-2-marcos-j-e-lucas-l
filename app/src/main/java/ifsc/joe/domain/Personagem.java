@@ -9,12 +9,19 @@ import java.awt.*;
 import java.util.Objects;
 
 import ifsc.joe.config.ConfiguracaoJogo;
+import ifsc.joe.resources.ImageCache;
 
 // Em suma ela é uma cópia da implementação de aldeão feita pelo professor;
 // Foi feito poucas alterações visando futuras implementações nelas;
 
 public abstract class Personagem {
 // Decidir não documentar linha por linha, pois ela é uma copia da aldeão, que está ao final toda escrita como comentarios;
+
+    protected Image imagemNormal;
+    protected Image imagemAtacando;
+    protected String nomeImagem;
+
+    private static final ImageCache recursoManager = ImageCache.getInstancia();
 
     // classe com todos os valores;
     // todas as classes podem usar sem precisar instancia-la;
@@ -23,7 +30,6 @@ public abstract class Personagem {
     protected int posX, posY;
     protected boolean atacando;
     protected Image icone;
-    protected String nomeImagem;
     protected int vida;
     protected int velocidade;
 
@@ -38,6 +44,25 @@ public abstract class Personagem {
         this.atacando = false;
         this.vida = vida;
         this.velocidade = v;
+
+        carregarImagens();
+    }
+
+    private void carregarImagens() {
+        System.out.println("Carregando imagens para: "+ nomeImagem);
+
+        this.imagemNormal = recursoManager.get(nomeImagem);
+        this.imagemAtacando = recursoManager.get(nomeImagem + "2");
+
+        // validações
+        if( imagemNormal == null) {
+            System.err.println("Imagem normal não carregada: "+ nomeImagem);
+        }
+
+        if (imagemAtacando == null) {
+            System.err.println("Imagem de ataque não carregada: " + nomeImagem + "2");
+        }
+        //recursoManager.exibirEstatisticasCache();
     }
 
     // Método para construir a barra de vida.
@@ -61,10 +86,31 @@ public abstract class Personagem {
     }
 
     public void desenhar(Graphics g, JPanel painel) {
-        this.icone = this.carregarImagem(nomeImagem + (atacando ? "2" : ""));
-        g.drawImage(this.icone, this.posX, this.posY, painel);
+
+        Image imagemAtual = atacando ? imagemAtacando : imagemNormal;
+
+        //this.icone = this.carregarImagem(nomeImagem + (atacando ? "2" : ""));
+        //g.drawImage(this.icone, this.posX, this.posY, painel);
+
+        if (imagemAtual == null) {
+            imagemAtual = imagemNormal;
+        }
+
+        if (imagemAtual != null){
+            g.drawImage(imagemAtual, this.posX, this.posY, painel);
+        }else {
+            desenharPlaceholder(g);
+        }
 
         barraVida(g);
+    }
+
+    private void desenharPlaceholder(Graphics g) {
+        g.setColor(Color.GRAY);
+        g.fillRect(posX, posY, 50, 50);
+        g.setColor(Color.BLACK);
+        g.drawRect(posX, posY, 50, 50);
+        g.drawString("?", posX + 20, posY + 30);
     }
 
     public void mover(Direcao direcao, int maxLargura, int maxAltura) {
@@ -77,8 +123,15 @@ public abstract class Personagem {
             case DIREITA  -> this.posX += velocidade;
         }
 
-        this.posX = Math.min(Math.max(0, this.posX), maxLargura - this.icone.getWidth(null));
-        this.posY = Math.min(Math.max(0, this.posY), maxAltura - this.icone.getHeight(null));
+        Image img = imagemNormal != null ? imagemNormal : imagemAtacando;
+        int larguraImg = img != null ? img.getWidth(null) : 50;
+        int alturaImg = img != null ? img.getHeight(null) : 50;
+
+        this.posX = Math.min(Math.max(0, this.posX), maxLargura - larguraImg);
+        this.posY = Math.min(Math.max(0, this.posY), maxAltura - alturaImg);
+
+        //this.posX = Math.min(Math.max(0, this.posX), maxLargura - this.icone.getWidth(null));
+        //this.posY = Math.min(Math.max(0, this.posY), maxAltura - this.icone.getHeight(null));
     }
 
     public void alterAtaque() {
@@ -129,79 +182,3 @@ public abstract class Personagem {
     }
 
 }
-
-// class que foi usada como base para implementar a personagem:
-// Deixar ela como backup kkkk
-
-// package ifsc.joe.domain.impl;
-
-// import ifsc.joe.enums.Direcao;
-
-// import javax.swing.*;
-// import java.awt.*;
-// import java.util.Objects;
-
-// public class Aldeao {
-
-//     public static final String NOME_IMAGEM = "aldeao";
-
-//     private int posX, posY;
-//     private boolean atacando;
-//     private Image icone;
-
-//     public Aldeao(int x, int y) {
-//         this.icone = this.carregarImagem(NOME_IMAGEM);
-//         this.posX = x;
-//         this.posY = y;
-//         this.atacando = false;
-//     }
-
-//     /**
-//      * Desenhando o Aldeão, nas coordenadas X e Y, com a imagem 'icone'
-//      * no JPanel 'pai'
-//      *
-//      * @param g objeto do JPanel que será usado para desenhar o Aldeão
-//      */
-//     public void desenhar(Graphics g, JPanel painel) {
-//         // verificando qual imagem carregar
-//         this.icone = this.carregarImagem(NOME_IMAGEM + (atacando ? "2" : ""));
-//         // desenhando de fato a imagem no pai
-//         g.drawImage(this.icone, this.posX, this.posY, painel);
-//     }
-
-//     /**
-//      * Atualiza as coordenadas X e Y do personagem
-//      *
-//      * @param direcao indica a direcao a ir.
-//      */
-//     public void mover(Direcao direcao, int maxLargura, int maxAltura) {
-//         switch (direcao) {
-//             case CIMA     -> this.posY -= 10;
-//             case BAIXO    -> this.posY += 10;
-//             case ESQUERDA -> this.posX -= 10;
-//             case DIREITA  -> this.posX += 10;
-//         }
-
-//         //Não deixa a imagem ser desenhada fora dos limites do JPanel pai
-//         this.posX = Math.min(Math.max(0, this.posX), maxLargura - this.icone.getWidth(null));
-//         this.posY = Math.min(Math.max(0, this.posY), maxAltura - this.icone.getHeight(null));
-//     }
-
-
-//     public void atacar() {
-//         this.atacando = !this.atacando;
-//     }
-
-//     /**
-//      * Metodo auxiliar para carregar uma imagem do disco
-//      *
-//      * @param imagem Caminho da imagem
-//      * @return Retorna um objeto Image
-//      */
-//     private Image carregarImagem(String imagem) {
-//         return new ImageIcon(Objects.requireNonNull(
-//                 getClass().getClassLoader().getResource("./"+imagem+".png")
-//         )).getImage();
-//     }
-
-// }
