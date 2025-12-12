@@ -30,11 +30,11 @@ public class PainelControles {
     private JRadioButton cavaleiroRadioButton;
     private JButton atacarButton;
     private JButton coletarButton;
+    private JButton montarDesmontarButton;
     private JButton buttonCima;
     private JButton buttonEsquerda;
     private JButton buttonBaixo;
     private JButton buttonDireita;
-    private JLabel logo;
 
     public PainelControles() {
         this.sorteio = new Random();
@@ -50,6 +50,7 @@ public class PainelControles {
         configurarBotoesCriacao();
         configurarBotaoAtaque();
         configurarBotaoColeta();
+        configurarBotaoMontaria();
     }
 
     // configurações dos botões de tipos;
@@ -123,7 +124,12 @@ public class PainelControles {
 
     // Botão de coleta.
     private void configurarBotaoColeta() {
-        coletarButton. addActionListener(e -> getTela().coletarRecursos());
+        coletarButton.addActionListener(e -> getTela().coletarRecursos());
+    }
+
+    // Botão de montaria.
+    private void configurarBotaoMontaria() {
+        montarDesmontarButton. addActionListener(e -> getTela().alternarMontaria());
     }
 
     private void atacarPersonagens() {

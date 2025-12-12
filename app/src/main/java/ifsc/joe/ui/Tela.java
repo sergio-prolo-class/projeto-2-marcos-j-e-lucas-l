@@ -7,6 +7,7 @@ import ifsc.joe.domain.Recursos;
 
 import ifsc.joe.domain.impl.*;
 import ifsc.joe.domain.interfaces.Coletador;
+import ifsc.joe.domain.interfaces.ComMontaria;
 import ifsc.joe.domain.interfaces.Guerreiro;
 import ifsc.joe.enums.Direcao;
 
@@ -204,7 +205,7 @@ public class Tela extends JPanel {
     }
 
     private void adicionarRecursoNaEconomia(Recursos recurso) {
-        int quantidadeColetada = 10; // Quantidade fixa por coleta
+        int quantidadeColetada = 1; // Quantidade fixa por coleta
 
         switch (recurso.getTipo()) {
             case MADEIRA:
@@ -419,6 +420,29 @@ public class Tela extends JPanel {
                     }
                 });
         this.repaint();
+    }
+
+    // Método para alternar montaria dos personagens filtrados
+    public void alternarMontaria() {
+        Set<Personagem> personagensFiltrados = getPersonagensFiltrados();
+
+        // Filtra apenas personagens com montaria.
+        Set<Personagem> comMontaria = personagensFiltrados.stream()
+                .filter(p -> p instanceof ComMontaria)
+                .collect(Collectors.toSet());
+
+        if (comMontaria.isEmpty()) {
+            System.out.println("⚠ Nenhum personagem com montaria selecionado!");
+            return;
+        }
+
+        // Alterna a montaria de cada personagem.
+        for (Personagem personagem : comMontaria) {
+            ComMontaria montado = (ComMontaria) personagem;
+            montado.alternarMontaria();
+        }
+
+        repaint();
     }
 
     // Logs para testar o funcionamento;

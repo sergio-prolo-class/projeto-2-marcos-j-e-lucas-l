@@ -17,14 +17,14 @@ public abstract class Personagem {
     protected int posX, posY;
     protected boolean atacando;
     protected Image icone;
-    protected String nomeImagem;
+    protected String nomeImagemBase;
     protected int vida;
     protected static final int VIDATOTAL = 100;
 
     public Personagem(int x, int y, String nomeImagem) {
         this.posX = x;
         this.posY = y;
-        this.nomeImagem = nomeImagem;
+        this.nomeImagemBase = nomeImagem;
         this.icone = this.carregarImagem(nomeImagem);
         this.atacando = false;
         this.vida = VIDATOTAL;
@@ -52,7 +52,7 @@ public abstract class Personagem {
     }
 
     public void desenhar(Graphics g, JPanel painel) {
-        this.icone = this.carregarImagem(nomeImagem + (atacando ? "2" : ""));
+        this.icone = this.carregarImagem(nomeImagemBase + (atacando ? "2" : ""));
         g.drawImage(this.icone, this.posX, this.posY, painel);
 
         barraVida(g);
@@ -78,7 +78,7 @@ public abstract class Personagem {
 
     public void receberDano (int dano) {
         this.vida = Math.max(0, this.vida - dano);
-        System.out.println(nomeImagem + " recebeu " + dano + " de dano. Vida: " + vida);
+        System.out.println(nomeImagemBase + " recebeu " + dano + " de dano. Vida: " + vida);
     }
 
     public boolean estaMorto() {
