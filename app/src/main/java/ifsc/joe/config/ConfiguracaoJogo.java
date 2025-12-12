@@ -72,13 +72,16 @@ public class ConfiguracaoJogo {
         propriedades.setProperty("aldeao.velocidade.montado", "18");
         propriedades.setProperty("aldeao.imagem.montado", "aldeaoMontado");
         propriedades.setProperty("aldeao.tipo.montaria", "Jegue");
-        
+
         // Arqueiro
         propriedades.setProperty("arqueiro.vida.inicial", "80");
         propriedades.setProperty("arqueiro.velocidade", "12");
         propriedades.setProperty("arqueiro.forca.ataque", "15");
         propriedades.setProperty("arqueiro.alcance", "100");
         propriedades.setProperty("arqueiro.defesa","5");
+        propriedades.setProperty("arqueiro.flechas", "0");
+        propriedades.setProperty("arqueiro.flechas.por.madeira", "10");
+        propriedades.setProperty("arqueiro.aviso.sem.flechas", "Arqueiro sem flechas!  Colete madeira para criar flechas.");
         
         // Cavaleiro
         propriedades.setProperty("cavaleiro.vida.inicial", "150");
@@ -180,6 +183,18 @@ public class ConfiguracaoJogo {
 
     public int getArqueiroDefesa(){
         return getInt("arqueiro.defesa");
+    }
+
+    public int getArqueiroFlechas() {
+        return getInt("arqueiro.flechas");
+    }
+
+    public int getArqueiroFlechasPorMadeira() {
+        return getInt("arqueiro.flechas.por.madeira");
+    }
+
+    public String getArqueiroAvisoSemFlechas() {
+        return getString("arqueiro.aviso.sem.flechas");
     }
 
     // Cavaleiro

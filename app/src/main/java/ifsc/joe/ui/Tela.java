@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 
+import ifsc.joe.enums.TipoRecurso;
 import ifsc.joe.factory.PersonagemFactory;
 import ifsc.joe.enums.TipoPersonagem;
 
@@ -199,6 +200,14 @@ public class Tela extends JPanel {
 
                     // Verifica se pode coletar esse tipo
                     if (coletador.podeColetarTipo(recurso.getTipo())) {
+                        if (personagem instanceof Arqueiro && recurso. getTipo() == TipoRecurso.MADEIRA) {
+                            ((Arqueiro) personagem).coletarMadeira();
+                            iterator.remove();
+                            algumRecursoColetado = true;
+                            System.out.println("Arqueiro coletou madeira e fabricou flechas!");
+                            break;
+                        }
+
                         // Adiciona à economia
                         adicionarRecursoNaEconomia(recurso);
 

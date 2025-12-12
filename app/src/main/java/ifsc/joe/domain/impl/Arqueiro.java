@@ -19,10 +19,17 @@ public class Arqueiro extends Personagem implements Guerreiro, Coletador {
     private static final int ALCANCE_ATAQUE = config.getArqueiroAlcance();
     private static final int VIDATOTAL = config.getArqueiroVidaInicial();
     private static final int VELOCIDADE_MOVIMENTO = config.getArqueiroVelocidade();
+    private static final int FLECHAS_POR_MADEIRA = config.getArqueiroFlechasPorMadeira();
+    private int flechas = config.getArqueiroFlechas();
 
     public Arqueiro(int x, int y) {
         super(x, y, NOME_IMAGEM, VIDATOTAL, VELOCIDADE_MOVIMENTO);
        // System.out.println(" Arqueiro criado em ("+ x+ ","+ y +")");
+    }
+
+    // Método para somar flechas quando coleta madeira.
+    public void coletarMadeira() {
+        flechas += FLECHAS_POR_MADEIRA;
     }
 
     // Implementação dos métodos das interfaces:
@@ -43,6 +50,11 @@ public class Arqueiro extends Personagem implements Guerreiro, Coletador {
             return false;
         }
 
+        if (flechas <= 0) {
+            config.getArqueiroAvisoSemFlechas();
+            return false;
+        }
+
         alterAtaque();
 
         int danoFinal = FORCA_ATAQUE;
@@ -52,6 +64,8 @@ public class Arqueiro extends Personagem implements Guerreiro, Coletador {
         }
 
         alvo.receberDano(danoFinal);
+
+        flechas--;
         System.out.println("Arqueiro causou " + danoFinal + " de dano!");
 
         return true;

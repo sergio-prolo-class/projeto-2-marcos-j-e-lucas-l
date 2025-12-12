@@ -163,7 +163,6 @@ public abstract class Personagem {
         )).getImage();
     }
 
-
     // getters:
     public int getPosX() {
         return posX;
