@@ -70,16 +70,16 @@ Para carregar esses dados, foi criada a classe `ConfiguracaoJogo.java` [ver arqu
 ### 6 pontos - Fabrica de personagem 
 
 implementado a fábrica de personagens, que visa a reutilização do código, evitando repetições desnecessárias. [ver arquivo](./app/src/main/java/ifsc/joe/factory/PersonagemFactory.java).
----
 
+---
 ## 6 Pontos - Cache de Recursos
 
 Foi implementada uma classe com o objetivo de carregar as imagens uma única vez, para melhorar o desempenho e a performance do jogo. [ver arquivo](./app/src/main/java/ifsc/joe/resources/ImageCache.java)
 
 A implementação foi realizada conforme as solicitações. Veja o arquivo
  da classe responsável por gerenciar o cache, e na classe abstrata foi implementado o uso do cache.
----
 
+---
 ## Exemplo de como ficaram as implementações:
 
 > O fluxo das classes ficram assim:
