@@ -2,7 +2,7 @@
 
 Todas funcionalidades obrigatória descritas no site foram implemtadas.
 
-<strong>Total de pontos até o momento:</strong> 20/32
+<strong>Total de pontos até o momento:</strong> 23/32
 
 > implementações:
 
@@ -11,6 +11,7 @@ Todas funcionalidades obrigatória descritas no site foram implemtadas.
 3. Sistema de morte - Concluído.
 3. Barra de vida - Concluído.
 4. Arquivo de configurações - Concluido.
+5. Fábrica de personagens - concluido
 
 ## Exemplo de como ficaram as implementações:
 
@@ -128,3 +129,9 @@ Foi adicionado o arquivo `joe.properties` [ver arquivo](./app/src/main/resources
 Para carregar esses dados, foi criada a classe `ConfiguracaoJogo.java` [ver arquivo](./app/src/main/java/ifsc/joe/config/ConfiguracaoJogo.java). Ela é responsável por ler o arquivo de configuração e disponibilizar getters para acesso aos valores nas demais classes do projeto.
 
 > Para mais informaões de como adicionar novos valores [ver documentação](./app/src/main/java/ifsc/joe/config/docs.md)
+
+
+### 6 pontos - Fabrica de personagem 
+
+implementado a fábrica de personagens, que visa a reutilização do código, evitando repetições desnecessárias. [ver arquivo](./app/src/main/java/ifsc/joe/factory/PersonagemFactory.java).
+

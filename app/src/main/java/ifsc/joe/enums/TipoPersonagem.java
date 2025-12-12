@@ -32,6 +32,4 @@ public enum TipoPersonagem {
     public String toString() {
         return nome;
     }
-    
-
 }
