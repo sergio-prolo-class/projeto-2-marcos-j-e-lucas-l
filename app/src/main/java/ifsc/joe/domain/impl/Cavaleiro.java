@@ -9,19 +9,18 @@ import ifsc.joe.domain.interfaces.ComMontaria;
 public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
 
     // Seus atributos
-    public static final String NOME_IMAGEM = "cavaleiro";
-    public static final String NOME_IMAGEM_DESMONTADO = "cavaleiroDesmontado";
-    private static final int FORCA_ATAQUE = 25;
-    private static final int DEFESA = 10;
-    private static final int ALCANCE_ATAQUE = 50;
-    private static final int VELOCIDADE_MONTADO = 20;
-    private static final int VELOCIDADE_DESMONTADO = 10;
-    private static final String TIPO_MONTARIA = "Cavalo";
-    private boolean montado;
+    public static final String NOME_IMAGEM = config.getCavaleiroImagemNome(); //"cavaleiro";
+    private static final int FORCA_ATAQUE = config.getCavaleiroForcaAtaque(); //25;
+    private static final int DEFESA = config.getCavaleiroDefesa(); //10;
+    private static final int ALCANCE_ATAQUE = config.getCavaleiroAlcance();//50;
+    private static final int VELOCIDADE_MOVIMENTO = config.getCavaleiroVelocidade();//15;
+    private static final String TIPO_MONTARIA = config.getCavaleiroTipoMontaria();//"Cavalo";
+    private static final int VIDATOTAL = config.getCavaleiroVidaInicial(); //150;
+    
 
     public Cavaleiro(int x, int y) {
-        super(x, y, NOME_IMAGEM);
-        this.montado = true;
+        super(x, y, NOME_IMAGEM, VIDATOTAL, VELOCIDADE_MOVIMENTO);
+        //System.out.println(" Cavaleiro criado em ("+ x+ ","+ y +")");
     }
 
     // métodos definidos nas interfaces ;
@@ -32,8 +31,8 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
     }
 
     @Override
-    public int getVelocidadeMovimento() {
-        return montado ? VELOCIDADE_MONTADO : VELOCIDADE_DESMONTADO;
+    public int getVelocidadeDeMovimento() {
+        return VELOCIDADE_MOVIMENTO;
     }
 
     @Override
@@ -77,37 +76,13 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
     }
 
     @Override
-    public String getTipoMontaria() {
+    public String getTipoDeMontaria() {
         return TIPO_MONTARIA;
     }
 
-    // Métodos da interface ComMontaria.
-
-    @Override
-    public boolean estaMontado() {
-        return montado;
-    }
-
-    @Override
-    public void alternarMontaria() {
-        this.montado = !this.montado;
-
-        this.nomeImagemBase = montado ? NOME_IMAGEM : NOME_IMAGEM_DESMONTADO;
-    }
-
-    @Override
-    public int getVelocidadeMontado() {
-        return VELOCIDADE_MONTADO;
-    }
-
-    @Override
-    public int getVelocidadeDesmontado() {
-        return VELOCIDADE_DESMONTADO;
-    }
-
-    @Override
-    protected int getVelocidadeBase() {
-        return getVelocidadeMovimento();
-    }
+    //@Override
+    //protected int getVelocidadeBase() {
+    //    return VELOCIDADE_MOVIMENTO;
+   // }
 
 }

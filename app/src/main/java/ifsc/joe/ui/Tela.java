@@ -18,8 +18,10 @@ import java.awt.event.ComponentEvent;
 import java.util.*;
 
 import java.util.stream.Collectors;
-
 import java.time.LocalDateTime;
+
+import ifsc.joe.factory.PersonagemFactory;
+import ifsc.joe.enums.TipoPersonagem;
 
 public class Tela extends JPanel {
 
@@ -63,6 +65,23 @@ public class Tela extends JPanel {
             }
         });
 
+    }
+
+    public void criarPersonagem(TipoPersonagem tipo, int x, int y){
+        try{
+            Personagem personagem = PersonagemFactory.criar(tipo, x, y);
+            personagem.desenhar(super.getGraphics(), this);
+            this.personagens.add(personagem);
+            //System.out.print("| Personagem criado com sucesso:"+ tipo.getNome());
+        }catch (IllegalArgumentException e ) {
+            System.out.println("Erro ao criar personagem:" + e.getMessage());
+        }
+    } 
+
+    public void criarPersonagemAleatorio(int x, int y)  {
+        Personagem personagem = PersonagemFactory.criarAleatorio(x, y);
+        personagem.desenhar(super.getGraphics(), this);
+        this.personagens.add(personagem);
     }
 
     // Método para criar a grama.

@@ -8,14 +8,24 @@ import ifsc.joe.enums.Direcao;
 import javax.swing.*;
 import java.util.Random;
 
+import ifsc.joe.config.ConfiguracaoJogo;
+
+import ifsc.joe.factory.PersonagemFactory;
+import ifsc.joe.enums.TipoPersonagem;
+
 /**
  * Classe responsável por gerenciar os controles e interações da interface.
  * Conecta os componentes visuais com a lógica do jogo (Tela).
  */
 public class PainelControles {
 
+
     private final Random sorteio;
     private Tela tela;
+
+    // valores da configuração;
+    private final ConfiguracaoJogo config = new ConfiguracaoJogo();
+    private final int PADDING =  config.getPersonagemPadding();
 
     // Componentes da interface (gerados pelo Form Designer)
     private JPanel painelPrincipal;
@@ -29,12 +39,11 @@ public class PainelControles {
     private JRadioButton arqueiroRadioButton;
     private JRadioButton cavaleiroRadioButton;
     private JButton atacarButton;
-    private JButton coletarButton;
-    private JButton montarDesmontarButton;
     private JButton buttonCima;
     private JButton buttonEsquerda;
     private JButton buttonBaixo;
     private JButton buttonDireita;
+    private JLabel logo;
 
     public PainelControles() {
         this.sorteio = new Random();
@@ -49,8 +58,6 @@ public class PainelControles {
         configurarBotoesMovimento();
         configurarBotoesCriacao();
         configurarBotaoAtaque();
-        configurarBotaoColeta();
-        configurarBotaoMontaria();
     }
 
     // configurações dos botões de tipos;
@@ -80,7 +87,6 @@ public class PainelControles {
         cavaleiroRadioButton.addActionListener(e -> 
             getTela().setFiltrosPersonagem(Move.CAVALEIRO)
         );
-
     }
 
     /**
@@ -98,21 +104,40 @@ public class PainelControles {
         buttonDireita.addActionListener(e ->  System.out.println(getTela().logsDosFiltros()));
         buttonEsquerda.addActionListener(e ->  System.out.println(getTela().logsDosFiltros()));
 
+        
     }
 
     /**
      * Configura todos os listeners dos botões de criação
      */
     private void configurarBotoesCriacao() {
-        bCriaAldeao.addActionListener(e -> criarAldeaoAleatorio());
-        bCriaArqueiro.addActionListener(e -> criarArqueiroAleatorio());
-        bCriaCavaleiro.addActionListener(e -> criarCavaleiroAleatorio());
+
+        bCriaAldeao.addActionListener(e -> criarPersonagemAleatorio(TipoPersonagem.ALDEAO));
+        bCriaArqueiro.addActionListener(e -> criarPersonagemAleatorio(TipoPersonagem.ARQUEIRO));
+        bCriaCavaleiro.addActionListener(e -> criarPersonagemAleatorio(TipoPersonagem.CAVALEIRO));
 
         // Logs de criação:
         bCriaAldeao.addActionListener(e -> System.out.println(getTela().logsDeCriacao("ALDEAO")));
         bCriaArqueiro.addActionListener(e -> System.out.println(getTela().logsDeCriacao("ARQUEIRO")));
         bCriaCavaleiro.addActionListener(e -> System.out.println(getTela().logsDeCriacao("CAVALEIRO")));
+    }
 
+    private void criarPersonagemAleatorio(TipoPersonagem tipo) {
+
+        if(!PersonagemFactory.podeSerCriado(tipo)) {
+            mostrarMensagemErro("Tipo não pode ser criado: "+ tipo.getNome());
+            System.out.println("Erro ao criar personagem");
+            return;
+        }
+        int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
+        int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
+        getTela().criarPersonagem(tipo, posX, posY);
+    }
+
+    private void criarPersonagemCompletamenteAleatorio() {
+        int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
+        int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
+        getTela().criarPersonagemAleatorio(posX, posY);
     }
 
     /**
@@ -120,16 +145,6 @@ public class PainelControles {
      */
     private void configurarBotaoAtaque() {
         atacarButton.addActionListener(e -> atacarPersonagens());
-    }
-
-    // Botão de coleta.
-    private void configurarBotaoColeta() {
-        coletarButton.addActionListener(e -> getTela().coletarRecursos());
-    }
-
-    // Botão de montaria.
-    private void configurarBotaoMontaria() {
-        montarDesmontarButton. addActionListener(e -> getTela().alternarMontaria());
     }
 
     private void atacarPersonagens() {
@@ -144,36 +159,6 @@ public class PainelControles {
         }
     }
 
-    /**
-     * Cria um personagens em posição aleatória na tela.
-     */
-    private void criarAldeaoAleatorio() {
-        final int PADDING = 50;
-        int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
-        int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
-
-        getTela().criarAldeao(posX, posY);
-    }
-
-    private void criarCavaleiroAleatorio() {
-        final int PADDING = 50;
-        int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
-        int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
-
-        getTela().criarCavaleiro(posX, posY);
-    }
-
-    private void criarArqueiroAleatorio() {
-        final int PADDING = 50;
-        int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
-        int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
-
-        getTela().criarArqueiro(posX, posY);
-    }
-
-    /**
-     * Exibe mensagem informando que a funcionalidade ainda não foi implementada.
-     */
     private void mostrarMensagemNaoImplementado(String funcionalidade) {
         JOptionPane.showMessageDialog(
                 painelPrincipal,
@@ -206,5 +191,14 @@ public class PainelControles {
      */
     private void createUIComponents() {
         this.painelTela = new Tela();
+    }
+
+    private void mostrarMensagemErro(String msg) {
+        JOptionPane.showMessageDialog(
+            painelPrincipal,
+            msg,
+            "Erro",
+            JOptionPane.ERROR_MESSAGE
+        );
     }
 }
