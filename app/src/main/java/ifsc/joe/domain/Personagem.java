@@ -48,7 +48,7 @@ public abstract class Personagem {
         carregarImagens();
     }
 
-    private void carregarImagens() {
+    protected void carregarImagens() {
         System.out.println("Carregando imagens para: "+ nomeImagem);
 
         this.imagemNormal = recursoManager.get(nomeImagem);
@@ -157,7 +157,7 @@ public abstract class Personagem {
      //   return 10;
     //}
 
-    private Image carregarImagem(String imagem) {
+    protected Image carregarImagem(String imagem) {
         return new ImageIcon(Objects.requireNonNull(
                 getClass().getClassLoader().getResource("./"+imagem+".png")
         )).getImage();

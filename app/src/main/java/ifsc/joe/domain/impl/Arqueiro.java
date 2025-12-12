@@ -1,7 +1,9 @@
 package ifsc.joe.domain.impl;
 
 import ifsc.joe.domain.Personagem;
+import ifsc.joe.domain.interfaces.Coletador;
 import ifsc.joe.domain.interfaces.Guerreiro;
+import ifsc.joe.enums.TipoRecurso;
 
 // implementação do arqueiro;
 // bem enxuta 
@@ -9,7 +11,7 @@ import ifsc.joe.domain.interfaces.Guerreiro;
 // Configurações padões, centralizar todas;
 //import ifsc.joe.config.ConfiguracaoJogo;
 
-public class Arqueiro extends Personagem implements Guerreiro {
+public class Arqueiro extends Personagem implements Guerreiro, Coletador {
 
     public static final String NOME_IMAGEM = config.getArqueiroImagemNome();
     private static final int FORCA_ATAQUE = config.getArqueiroForcaAtaque();
@@ -70,6 +72,20 @@ public class Arqueiro extends Personagem implements Guerreiro {
     @Override
     public int getAlcanceAtaque() {
         return ALCANCE_ATAQUE;
+    }
+
+    // Métodos da interface coletador.
+
+    @Override
+    public boolean podeColetarTipo(TipoRecurso tipo) {
+        // Aldeão coleta trigo e ouro.
+        return tipo == TipoRecurso.TRIGO ||
+                tipo == TipoRecurso.MADEIRA;
+    }
+
+    @Override
+    public int getRaioColeta() {
+        return 50;  // Raio de coleta do aldeão
     }
 
 }

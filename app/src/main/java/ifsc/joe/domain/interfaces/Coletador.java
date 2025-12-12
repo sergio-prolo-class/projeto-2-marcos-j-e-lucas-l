@@ -6,9 +6,7 @@ import ifsc.joe.enums.TipoRecurso;
 
 public interface Coletador {
     //métodos basicos;
-    void coletar();  // Coleta recurso específico
     boolean podeColetarTipo(TipoRecurso tipo);  // Verifica se pode coletar
-    int getCapacidadeColeta();
     int getRaioColeta();
 
 }

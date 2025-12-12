@@ -4,7 +4,6 @@ package ifsc.joe.domain.interfaces;
 
 public interface ComMontaria {
     // métodos basicos;
-    int getVelocidadeMovimento();
     String getTipoMontaria();
 
     boolean estaMontado();

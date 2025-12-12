@@ -68,6 +68,10 @@ public class ConfiguracaoJogo {
         propriedades.setProperty("aldeao.vida.inicial", "100");
         propriedades.setProperty("aldeao.velocidade", "10");
         propriedades.setProperty("aldeao.capacidade.coleta", "10");
+        propriedades.setProperty("aldeao.velocidade.desmontado", "10");
+        propriedades.setProperty("aldeao.velocidade.montado", "18");
+        propriedades.setProperty("aldeao.imagem.montado", "aldeaoMontado");
+        propriedades.setProperty("aldeao.tipo.montaria", "Jegue");
         
         // Arqueiro
         propriedades.setProperty("arqueiro.vida.inicial", "80");
@@ -82,6 +86,9 @@ public class ConfiguracaoJogo {
         propriedades.setProperty("cavaleiro.forca.ataque", "25");
         propriedades.setProperty("cavaleiro.alcance", "50");
         propriedades.setProperty("cavaleiro.defesa", "10");
+        propriedades.setProperty("cavaleiro.velocidade.desmontado", "10");
+        propriedades.setProperty("cavaleiro.velocidade.montado", "20");
+        propriedades.setProperty("cavaleiro.imagem. desmontado", "cavaleiroDesmontado");
     }
 
     // ===== MÉTODOS GETTER TIPADOS =====
@@ -132,6 +139,22 @@ public class ConfiguracaoJogo {
 
     public String getAldeaoImagemNome() {
         return getString("aldeao.imagem.nome");
+    }
+
+    public int getAldeaoVelocidadeDesmontado() {
+        return getInt("aldeao.velocidade.desmontado");
+    }
+
+    public int getAldeaoVelocidadeMontado() {
+        return getInt("aldeao.velocidade.montado");
+    }
+
+    public String getAldeaoImagemMontado() {
+        return getString("aldeao.imagem.montado");
+    }
+
+    public String getAldeaoTipoMontaria() {
+        return getString("aldeao.tipo.montaria");
     }
 
     // Arqueiro
@@ -186,6 +209,18 @@ public class ConfiguracaoJogo {
 
     public String getCavaleiroImagemNome() {
         return getString("cavaleiro.imagem.nome");
+    }
+
+    public int getCavaleiroVelocidadeDesmontado() {
+        return getInt("cavaleiro.velocidade.desmontado");
+    }
+
+    public int getCavaleiroVelocidadeMontado() {
+        return getInt("cavaleiro.velocidade.montado");
+    }
+
+    public String getCavaleiroImagemDesmontado() {
+        return getString("cavaleiro.imagem.desmontado");
     }
 
     /**

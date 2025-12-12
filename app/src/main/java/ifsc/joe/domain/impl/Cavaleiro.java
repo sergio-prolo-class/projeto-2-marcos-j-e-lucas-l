@@ -10,16 +10,19 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
 
     // Seus atributos
     public static final String NOME_IMAGEM = config.getCavaleiroImagemNome(); //"cavaleiro";
+    public static final String NOME_IMAGEM_DESMONTADO = config.getCavaleiroImagemDesmontado();
     private static final int FORCA_ATAQUE = config.getCavaleiroForcaAtaque(); //25;
     private static final int DEFESA = config.getCavaleiroDefesa(); //10;
     private static final int ALCANCE_ATAQUE = config.getCavaleiroAlcance();//50;
-    private static final int VELOCIDADE_MOVIMENTO = config.getCavaleiroVelocidade();//15;
+    private static final int VELOCIDADE_MONTADO = config.getCavaleiroVelocidadeMontado();//15;
+    private static final int VELOCIDADE_DESMONTADO = config.getCavaleiroVelocidadeDesmontado();
     private static final String TIPO_MONTARIA = config.getCavaleiroTipoMontaria();//"Cavalo";
-    private static final int VIDATOTAL = config.getCavaleiroVidaInicial(); //150;
-    
+    private static final int VIDA_TOTAL = config.getCavaleiroVidaInicial(); //150;
+    private boolean montado;
 
     public Cavaleiro(int x, int y) {
-        super(x, y, NOME_IMAGEM, VIDATOTAL, VELOCIDADE_MOVIMENTO);
+        super(x, y, NOME_IMAGEM, VIDA_TOTAL, VELOCIDADE_MONTADO);
+        this.montado = true;
         //System.out.println(" Cavaleiro criado em ("+ x+ ","+ y +")");
     }
 
@@ -28,11 +31,6 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
     @Override
     public int getForcaAtaque() {
         return FORCA_ATAQUE;
-    }
-
-    @Override
-    public int getVelocidadeDeMovimento() {
-        return VELOCIDADE_MOVIMENTO;
     }
 
     @Override
@@ -76,7 +74,34 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
     }
 
     @Override
-    public String getTipoDeMontaria() {
+    public boolean estaMontado() {
+        return montado;
+    }
+
+    @Override
+    public void alternarMontaria() {
+        this.montado = !this.montado;
+
+        this.nomeImagem = montado ? NOME_IMAGEM : NOME_IMAGEM_DESMONTADO;
+
+        this.velocidade = montado ? VELOCIDADE_MONTADO : VELOCIDADE_DESMONTADO;
+
+        carregarImagens();
+
+    }
+
+    @Override
+    public int getVelocidadeMontado() {
+        return VELOCIDADE_MONTADO;
+    }
+
+    @Override
+    public int getVelocidadeDesmontado() {
+        return VELOCIDADE_DESMONTADO;
+    }
+
+    @Override
+    public String getTipoMontaria() {
         return TIPO_MONTARIA;
     }
 

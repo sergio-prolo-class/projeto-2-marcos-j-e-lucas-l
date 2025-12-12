@@ -39,6 +39,8 @@ public class PainelControles {
     private JRadioButton arqueiroRadioButton;
     private JRadioButton cavaleiroRadioButton;
     private JButton atacarButton;
+    private JButton coletarButton;
+    private JButton montarDesmontarButton;
     private JButton buttonCima;
     private JButton buttonEsquerda;
     private JButton buttonBaixo;
@@ -58,6 +60,8 @@ public class PainelControles {
         configurarBotoesMovimento();
         configurarBotoesCriacao();
         configurarBotaoAtaque();
+        configurarBotaoColeta();
+        configurarBotaoMontaria();
     }
 
     // configurações dos botões de tipos;
@@ -145,6 +149,16 @@ public class PainelControles {
      */
     private void configurarBotaoAtaque() {
         atacarButton.addActionListener(e -> atacarPersonagens());
+    }
+
+    // Método para criar o botão coleta.
+    private void configurarBotaoColeta() {
+        coletarButton.addActionListener(e -> getTela().coletarRecursos());
+    }
+
+    // Método para criar o botão de montar e desmontar.
+    private void configurarBotaoMontaria() {
+        montarDesmontarButton. addActionListener(e -> getTela().alternarMontaria());
     }
 
     private void atacarPersonagens() {
