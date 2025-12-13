@@ -68,6 +68,7 @@ public class Tela extends JPanel {
 
     }
 
+    // Cria o personagem.
     public void criarPersonagem(TipoPersonagem tipo, int x, int y){
         try {
             Personagem personagem = PersonagemFactory.criarComCusto(tipo, x, y, this.estoque);
@@ -83,6 +84,7 @@ public class Tela extends JPanel {
         }
     } 
 
+    // Cria o personagem em lugares aleatórios.
     public void criarPersonagemAleatorio(int x, int y)  {
         Personagem personagem = PersonagemFactory.criarAleatorio(x, y);
         personagem.desenhar(super.getGraphics(), this);
@@ -236,6 +238,7 @@ public class Tela extends JPanel {
         repaint();
     }
 
+    // Adiciona recurso.
     private void adicionarRecursoNaEconomia(Recursos recurso) {
         int quantidadeColetada = 1; // Quantidade fixa por coleta
 
@@ -256,6 +259,7 @@ public class Tela extends JPanel {
         return estoque;
     }
 
+    // Desenho da barra de recursos.
     private void desenharBarraRecursos(Graphics g) {
         // Fundo da barra
         g.setColor(new Color(0, 0, 0, 180)); // Preto semi-transparente
@@ -297,11 +301,6 @@ public class Tela extends JPanel {
         return false;
     }
 
-    /**
-     * Method que invocado sempre que o JPanel precisa ser resenhado.
-     * @param g Graphics componente de java.awt
-     */
-
     // Método para fazer a imagem de fundo.
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -326,37 +325,12 @@ public class Tela extends JPanel {
         super.paint(g);
     }
 
-    /**
-     * Cria um personagens nas coordenadas X e Y, desenha-o neste JPanel
-     * e adiciona o mesmo na lista de personagens:
-     *
-     * @param x coordenada X
-     * @param y coordenada Y
-     */
-    public void criarAldeao(int x, int y) {
-        Aldeao aldeao = new Aldeao(x, y);
-        aldeao.desenhar(super.getGraphics(), this);
-        this.personagens.add(aldeao);
-    }
-
-    public void criarCavaleiro(int x, int y) {
-        Cavaleiro cavaleiro = new Cavaleiro(x, y);
-        cavaleiro.desenhar(super.getGraphics(), this);
-        this.personagens.add(cavaleiro);
-    }
-
-    public void criarArqueiro(int x, int y) {
-        Arqueiro arqueiro = new Arqueiro(x, y);
-        arqueiro.desenhar(super.getGraphics(), this);
-        this.personagens.add(arqueiro);
-    }
-
     // ajusta o tipo na variável do tipo;
     public void setFiltrosPersonagem(String tipo) {
         this.filtroAtual = tipo;
     }
 
-
+    // Checagem de filtro.
     private boolean personagemCorrespondeAoFiltro(Personagem personagens) {
         switch(filtroAtual) {
             case "TODOS":
@@ -378,11 +352,6 @@ public class Tela extends JPanel {
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * Atualiza as coordenadas X ou Y de todos os aldeoes
-     *
-     * @param direcao direcao para movimentar
-     */
 
     // nova implementação de movimentação:
     public void movimentarPersonagens(Direcao direcao) {
@@ -394,31 +363,13 @@ public class Tela extends JPanel {
         this.repaint();
 
     }
-    // antiga implmentação:
-
-    // public void movimentarAldeoes(Direcao direcao) {
-    //     //TODO preciso ser melhorado
-
-    //     this.personagens.forEach(personagens -> personagens.mover(direcao, this.getWidth(), this.getHeight()));
-
-    //     // Depois que as coordenadas foram atualizadas é necessário repintar o JPanel
-    //     this.repaint();
-    // }
 
     // Guerreiros atacam unidades próximas causando dano a elas.
     public void combate() {
-        int personagensAntes = personagens.size();
-
-        personagens.removeIf(p -> {
-            if (p. estaMorto()) {
-                estoque.incrementarBaixas(); // Incrementa baixas para cada morto
-                return true;
-            }
-            return false;
-        });
 
         personagens.stream()
                 .filter(p -> p instanceof Guerreiro)
+                .filter(p -> !p.estaMorto())
                 .forEach(atacante -> {
                     Guerreiro guerreiro = (Guerreiro) atacante;
 
@@ -430,8 +381,33 @@ public class Tela extends JPanel {
                                     atacante.distanciaAlvo(p2)
                             ))
                             . orElse(null);
+
+                    // Caso arqueiro não tenha flechas.
                     if (alvoMaisProximo != null) {
-                        guerreiro.ataque(alvoMaisProximo);
+                        if (atacante instanceof Arqueiro) {
+                            Arqueiro arqueiro = (Arqueiro) atacante;
+                            if (arqueiro.getFlechas() <= 0) {
+                                System.out.println("Arqueiro sem flechas! Colete madeira para fabricar munição.");
+                                return;
+                            }
+                        }
+
+                        boolean ataqueRealizado = guerreiro.ataque(alvoMaisProximo);
+
+                        // Mensagem no terminal de ataques.
+                        if (ataqueRealizado) {
+                            String nomeAtacante = atacante.getClass().getSimpleName();
+                            String nomeAlvo = alvoMaisProximo.getClass().getSimpleName();
+                            int vidaRestante = alvoMaisProximo.getVida();
+
+                            System.out.println("⚔️ " + nomeAtacante + " atacou " + nomeAlvo +
+                                    " (Força: " + guerreiro.getForcaAtaque() +
+                                    " | Vida restante: " + vidaRestante + ")");
+
+                            if (alvoMaisProximo. estaMorto()) {
+                                System.out.println(nomeAlvo + " foi derrotado!");
+                            }
+                        }
                     }
                 });
 
@@ -449,17 +425,11 @@ public class Tela extends JPanel {
 
     // Combate por diferenciação de tipo.
     public void combatePorTipo (Class<? extends Personagem> tipo) {
-        personagens. removeIf(p -> {
-            if (p.estaMorto()) {
-                estoque. incrementarBaixas();
-                return true;
-            }
-            return false;
-        });
 
         personagens.stream()
                 .filter(tipo::isInstance)
                 .filter(p -> p instanceof Guerreiro)
+                .filter(p -> !p.estaMorto())
                 .forEach(atacante -> {
                     Guerreiro guerreiro = (Guerreiro) atacante;
 

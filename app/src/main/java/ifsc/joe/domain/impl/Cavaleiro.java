@@ -36,7 +36,6 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
     @Override
     public void atacar() {
         alterAtaque();
-        System.out.println("Cavaleiro atacando com lança!:" + FORCA_ATAQUE);
     }
 
     @Override
@@ -44,7 +43,6 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
         if (alvo == null || alvo.estaMorto()) {
             return false;
         } else if (distanciaAlvo(alvo) > ALCANCE_ATAQUE) {
-            System.out.println("Alvo fora de alcance!");
             return false;
         }
 
@@ -57,14 +55,12 @@ public class Cavaleiro extends Personagem implements Guerreiro, ComMontaria {
         }
 
         alvo.receberDano(danoFinal);
-        System.out.println("Cavaleiro causou " + danoFinal + " de dano.");
         return true;
     }
 
     @Override
     public int defender (int dano) {
         int danoReduzido = Math.max(0, dano - DEFESA);
-        System.out.println("Cavaleiro defendeu! Dano: " + dano + " -> " + danoReduzido);
         return danoReduzido;
     }
 

@@ -27,6 +27,10 @@ public class Arqueiro extends Personagem implements Guerreiro, Coletador {
        // System.out.println(" Arqueiro criado em ("+ x+ ","+ y +")");
     }
 
+    public int getFlechas() {
+        return flechas;
+    }
+
     // Método para somar flechas quando coleta madeira.
     public void coletarMadeira() {
         flechas += FLECHAS_POR_MADEIRA;

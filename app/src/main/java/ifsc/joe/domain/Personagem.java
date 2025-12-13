@@ -10,12 +10,9 @@ import java.util.Objects;
 
 import ifsc.joe.config.ConfiguracaoJogo;
 import ifsc.joe.resources.ImageCache;
-
-// Em suma ela é uma cópia da implementação de aldeão feita pelo professor;
-// Foi feito poucas alterações visando futuras implementações nelas;
+import ifsc.joe.domain.interfaces.Guerreiro;
 
 public abstract class Personagem {
-// Decidir não documentar linha por linha, pois ela é uma copia da aldeão, que está ao final toda escrita como comentarios;
 
     protected Image imagemNormal;
     protected Image imagemAtacando;
@@ -31,18 +28,17 @@ public abstract class Personagem {
     protected boolean atacando;
     protected Image icone;
     protected int vida;
+    protected int vidaMaxima;
     protected int velocidade;
 
-    // Valor padrão definido;
-    protected static final int VIDATOTAL = 100;
-
-    public Personagem(int x, int y, String nomeImagem, int vida, int v) {
+    public Personagem(int x, int y, String nomeImagem, int vidaMaxima, int v) {
         this.posX = x;
         this.posY = y;
         this.nomeImagem = nomeImagem;
         this.icone = this.carregarImagem(nomeImagem);
         this.atacando = false;
-        this.vida = vida;
+        this.vidaMaxima = vidaMaxima;
+        this.vida = vidaMaxima;
         this.velocidade = v;
 
         carregarImagens();
@@ -66,23 +62,35 @@ public abstract class Personagem {
     }
 
     // Método para construir a barra de vida.
-    private void barraVida(Graphics g) {
+    private void barraVida(Graphics g, int x, int y) {
+
+        double porcentagemVida = (double) vida / vidaMaxima;
+
+        Color corBarra = null;
+
+        if (porcentagemVida > 0.75) {
+            corBarra = Color.GREEN;
+        } else if (porcentagemVida > 0.25) {
+            corBarra = Color.YELLOW;
+        } else {
+            corBarra = Color.RED;
+        }
+
         int larguraBarra = 40;
         int alturaBarra = 5;
-        int offsetY = -10;
+        int larguraVida = (int) (larguraBarra * porcentagemVida);
 
-        // Barra vermelha de borda
-        g.setColor(Color.RED);
-        g.fillRect(posX, posY + offsetY, larguraBarra, alturaBarra);
+        // Barra preta de borda
+        g.setColor(Color.BLACK);
+        g.fillRect(x, y - alturaBarra - 2, larguraBarra, alturaBarra);
 
         // Barra verde de vida.
-        int larguraVida = (int) ((double) vida / VIDATOTAL  * larguraBarra);
-        g.setColor(Color.GREEN);
-        g.fillRect(posX, posY + offsetY, larguraVida, alturaBarra);
+        g.setColor(corBarra);
+        g.fillRect(x, y - alturaBarra - 2, larguraVida, alturaBarra);
 
-        // Borda preta.
-        g.setColor(Color.BLACK);
-        g.drawRect(posX, posY + offsetY, larguraBarra, alturaBarra);
+        // Borda branca.
+        g.setColor(Color.WHITE);
+        g.drawRect(x, y - alturaBarra - 2, larguraBarra, alturaBarra);
     }
 
     public void desenhar(Graphics g, JPanel painel) {
@@ -98,11 +106,48 @@ public abstract class Personagem {
 
         if (imagemAtual != null){
             g.drawImage(imagemAtual, this.posX, this.posY, painel);
-        }else {
+        } else {
             desenharPlaceholder(g);
         }
 
-        barraVida(g);
+        barraVida(g, posX, posY);
+        desenharAlcanceAtaque(g);
+    }
+
+    // Método para desenhar o círculo de alcance.
+    private void desenharAlcanceAtaque(Graphics g) {
+        if (this instanceof Guerreiro) {
+            Guerreiro guerreiro = (Guerreiro) this;
+            int alcance = guerreiro.getAlcanceAtaque();
+
+            // Converte para Graphics2D para fazer a transparência.
+            Graphics2D g2d = (Graphics2D) g;
+
+            // Salva a cor original.
+            Color corOriginal = g2d.getColor();
+
+            // Colocar transparência na cor.
+            Color vermelhoTransparente = new Color(255, 0, 0, 50);
+            g2d.setColor(vermelhoTransparente);
+
+            // Cálculo do centro do personagem.
+            Image img = imagemNormal != null ? imagemNormal : imagemAtacando;
+            int larguraImg = img != null ? img.getWidth(null) : 50;
+            int alturaImg = img != null ? img.getHeight(null) : 50;
+
+            int centroX = posX + (larguraImg / 2);
+            int centroY = posY + (alturaImg / 2);
+
+            // Desenho do círculo de alcance.
+            g2d.fillOval(
+                    centroX - alcance,
+                    centroY - alcance,
+                    alcance * 2,
+                    alcance * 2
+            );
+
+            g2d.setColor(corOriginal);
+        }
     }
 
     private void desenharPlaceholder(Graphics g) {
@@ -114,7 +159,7 @@ public abstract class Personagem {
     }
 
     public void mover(Direcao direcao, int maxLargura, int maxAltura) {
-        //int velocidade = getVelocidadeBase();
+        final int ALTURA_BARRA_RECURSOS = 40;
 
         switch (direcao) {
             case CIMA     -> this.posY -= velocidade;
@@ -128,10 +173,12 @@ public abstract class Personagem {
         int alturaImg = img != null ? img.getHeight(null) : 50;
 
         this.posX = Math.min(Math.max(0, this.posX), maxLargura - larguraImg);
-        this.posY = Math.min(Math.max(0, this.posY), maxAltura - alturaImg);
+        // Limita o movimento para não atingir a barra de recursos.
+        this.posY = Math.min(
+                Math.max(ALTURA_BARRA_RECURSOS, this.posY),
+                maxAltura - alturaImg
+        );
 
-        //this.posX = Math.min(Math.max(0, this.posX), maxLargura - this.icone.getWidth(null));
-        //this.posY = Math.min(Math.max(0, this.posY), maxAltura - this.icone.getHeight(null));
     }
 
     public void alterAtaque() {
@@ -152,10 +199,6 @@ public abstract class Personagem {
         int dy = this.posY - alvo.posY;
         return Math.sqrt(dx * dx + dy * dy);
     }
-
-   // protected int getVelocidadeBase() {
-     //   return 10;
-    //}
 
     protected Image carregarImagem(String imagem) {
         return new ImageIcon(Objects.requireNonNull(

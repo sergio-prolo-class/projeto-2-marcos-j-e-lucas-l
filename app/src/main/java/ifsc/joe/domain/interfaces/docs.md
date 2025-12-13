@@ -12,19 +12,18 @@ Meu objetivo é garantir que tudo esteja em perfeito funcionamento e atendendo a
 
                   <<interface>>
                   Coletador
-                  +-----------+
-                  | + Coletar |
-                  | + get...  |
-                  | + outros..|
-                  +-----------+
-                       ^
-                       | implements
-                +---------------+
-                |    Aldeão     |
-                +---------------+
-                | - x, y, vida  |
-                | + métodos...  |
-                +---------------+
+                  +-------------------------+
+                  | boolean podeColetarTipo |
+                  | int getRaioColeta();    |
+                  +-------------------------+
+                             ^
+                             | implements
+                  +-------------------------+
+                  |         Aldeão          |
+                  +-------------------------+
+                  | - x, y, vida            |
+                  | + métodos...            |
+                  +-------------------------+
                        ^
                        |
              +----------------------+

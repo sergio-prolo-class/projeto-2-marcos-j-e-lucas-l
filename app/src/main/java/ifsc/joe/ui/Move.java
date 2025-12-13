@@ -11,22 +11,6 @@ public class Move {
     public static final String ARQUEIRO = "ARQUEIRO";
     public static final String CAVALEIRO = "CAVALEIRO";
 
-    // // Getter para escolher qual personagem deve ser movido;
-    // public static String TODOS(){
-    //     return "TODOS";
-    // }
-
-    // public static String ALDEAO(){
-    //     return "ALDEAO";
-    // }
-
-    // public static String ARQUEIRO() {
-    //     return "ARQUEIRO";
-    // }
-
-    // public static String CAVALEIRO() {
-    //     return "CAVALEIRO";
-    // }
 
 }
 

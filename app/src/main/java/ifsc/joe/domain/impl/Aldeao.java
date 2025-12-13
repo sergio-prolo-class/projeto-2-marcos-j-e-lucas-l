@@ -26,7 +26,6 @@ public class Aldeao extends Personagem implements Coletador, ComMontaria {
     public Aldeao(int x, int y) {
         super(x, y, NOME_IMAGEM, VALOR_DE_VIDA, VELOCIDADE_DESMONTADO);
         this.montado = false;
-        //System.out.println(" Aldeão criado em ("+ x+ ","+ y +")");
     }
 
     // Sem muito segredo até aqui;

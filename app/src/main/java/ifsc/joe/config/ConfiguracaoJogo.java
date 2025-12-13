@@ -92,6 +92,9 @@ public class ConfiguracaoJogo {
         propriedades.setProperty("cavaleiro.velocidade.desmontado", "10");
         propriedades.setProperty("cavaleiro.velocidade.montado", "20");
         propriedades.setProperty("cavaleiro.imagem. desmontado", "cavaleiroDesmontado");
+
+        // Personagem
+        propriedades.setProperty("personagem.vida.total", "100");
     }
 
     // ===== MÉTODOS GETTER TIPADOS =====
@@ -236,6 +239,12 @@ public class ConfiguracaoJogo {
 
     public String getCavaleiroImagemDesmontado() {
         return getString("cavaleiro.imagem.desmontado");
+    }
+
+    // Personagem
+
+    public int getVidaTotal() {
+        return getInt("personagem.vida.total");
     }
 
     /**

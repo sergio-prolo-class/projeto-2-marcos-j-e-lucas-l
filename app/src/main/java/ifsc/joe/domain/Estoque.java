@@ -38,13 +38,6 @@ public class Estoque {
         return false;
     }
 
-    // Método para resetar recursos.
-    public void resetar() {
-        this.madeira = 0;
-        this.ouro = 0;
-        this.trigo = 0;
-    }
-
     public void adicionarMadeira(int quantidade) {
         this.madeira += quantidade;
     }

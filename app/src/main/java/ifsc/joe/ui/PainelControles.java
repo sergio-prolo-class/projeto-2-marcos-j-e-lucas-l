@@ -179,15 +179,6 @@ public class PainelControles {
         }
     }
 
-    private void mostrarMensagemNaoImplementado(String funcionalidade) {
-        JOptionPane.showMessageDialog(
-                painelPrincipal,
-                "Preciso ser implementado",
-                funcionalidade,
-                JOptionPane.INFORMATION_MESSAGE
-        );
-    }
-
     /**
      * Obtém a referência da Tela com cast seguro.
      */

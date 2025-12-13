@@ -86,7 +86,7 @@ public class ImageCache {
 
     // Melhorar esse método mais tarde
     public void exibirEstatisticasCache() {
-        System.out.println("\n [warning] ESTATICAS DO cache");
+        System.out.println("\n [warning] ESTATISTICAS DO cache");
         System.out.println("Tamanho do cache: "+ getTamanhoCache() + " imagens");
         System.out.println("Tentativas de carregamento: "+ tentativasCarregamento);
         System.out.println("Cache HIT: " + hitCache);
