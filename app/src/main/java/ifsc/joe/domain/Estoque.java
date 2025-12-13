@@ -13,6 +13,24 @@ public class Estoque {
         this.trigo = 0;
     }
 
+    // Método para o estoque de recursos.
+    public boolean temRecursos(int madeira, int ouro, int trigo) {
+        return this.madeira >= madeira &&
+                this.ouro >= ouro &&
+                this.trigo >= trigo;
+    }
+
+    // Método para o consumo de recursos.
+    public boolean consumirRecursos(int madeira, int ouro, int trigo) {
+        if (temRecursos(madeira, ouro, trigo)) {
+            this.madeira -= madeira;
+            this.ouro -= ouro;
+            this.trigo -= trigo;
+            return true;
+        }
+        return false;
+    }
+
     public void adicionarMadeira(int quantidade) {
         this.madeira += quantidade;
     }

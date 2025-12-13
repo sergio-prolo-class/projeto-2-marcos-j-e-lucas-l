@@ -2,7 +2,7 @@
 
 Todas funcionalidades **obrigatória** descritas no site foram implemtadas.
 
-<strong>Total de pontos até o momento:</strong> 29/32
+<strong>Total de pontos até o momento:</strong> 24/32
 
 > implementações:
 
@@ -11,9 +11,11 @@ Todas funcionalidades **obrigatória** descritas no site foram implemtadas.
 3. Sistema de morte - 90% concluído.
 4. Alcance variável- 90% concluído. 
 5. Barra de vida - 90% Concluído.
-6. Arquivo de configurações - Concluído.
-7. Fábrica de personagens - concluído
-8. Cache de Recursos - concluído 
+6. Controle de montaria - Concluído.
+7. Arquivo de configurações - Concluído.
+8. Fábrica de personagens - Concluído
+9. Cache de Recursos - Concluído.
+10. Sistema de coleta - Concluído.
 
 ---
 
@@ -81,6 +83,16 @@ A implementação foi realizada conforme as solicitações. Veja o arquivo
  da classe responsável por gerenciar o cache, e na classe abstrata foi implementado o uso do cache.
 
 ---
+
+## 4 pontos - Sistema de coleta
+
+Foi implementado um sistema de coleta baseado na classe Estoque e nas suas derivações.
+
+## 5 pontos - Economia
+
+Foi implementado um sistema de economia com a adição de métodos na superclasse Estoque, e com alterações também nas classes PersonagemFactory, Tela e PainelControles.
+
+
 ## Exemplo de como ficaram as implementações:
 
 > O fluxo das classes ficram assim:

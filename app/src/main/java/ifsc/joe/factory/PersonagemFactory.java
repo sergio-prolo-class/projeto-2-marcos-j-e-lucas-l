@@ -1,5 +1,6 @@
 package ifsc.joe.factory;
 
+import ifsc.joe.domain.Estoque;
 import ifsc.joe.domain.Personagem;
 import ifsc.joe.domain.impl.Aldeao;
 import ifsc.joe.domain.impl.Arqueiro;
@@ -17,6 +18,49 @@ public class PersonagemFactory {
     private PersonagemFactory() {
         throw new AssertionError("Classe factory não deve ser instanciada");
     }
+
+     public static Personagem criarComCusto(TipoPersonagem tipo, int x, int y, Estoque estoque) {
+         if (tipo == null) {
+             throw new IllegalArgumentException("Tipo de personagem não pode ser nulo");
+         }
+
+         if (! tipo.isCriavel()) {
+             throw new IllegalArgumentException(
+                     String.format("Tipo '%s' não pode ser criado diretamente", tipo.getNome())
+             );
+         }
+
+         // Define o custo de cada personagem
+         int custoMadeira = 0;
+         int custoOuro = 0;
+         int custoTrigo = 0;
+
+         switch (tipo) {
+             case ALDEAO:
+                 // Aldeão não tem custo
+                 break;
+             case ARQUEIRO:
+                 custoTrigo = 1;
+                 break;
+             case CAVALEIRO:
+                 custoOuro = 1;
+                 break;
+         }
+
+         // Verifica se tem recursos suficientes
+         if (! estoque.temRecursos(custoMadeira, custoOuro, custoTrigo)) {
+             throw new IllegalStateException(
+                     String.format("Recursos insuficientes para criar %s!  Necessário: %d madeira, %d ouro, %d trigo",
+                             tipo.getNome(), custoMadeira, custoOuro, custoTrigo)
+             );
+         }
+
+         // Consome os recursos
+         estoque.consumirRecursos(custoMadeira, custoOuro, custoTrigo);
+
+         // Cria o personagem
+         return criar(tipo, x, y);
+     }
 
      // Cria um personagem do tipo especificado nas coordenadas fornecidas.
 

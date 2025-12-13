@@ -69,12 +69,16 @@ public class Tela extends JPanel {
     }
 
     public void criarPersonagem(TipoPersonagem tipo, int x, int y){
-        try{
-            Personagem personagem = PersonagemFactory.criar(tipo, x, y);
+        try {
+            Personagem personagem = PersonagemFactory.criarComCusto(tipo, x, y, this.estoque);
             personagem.desenhar(super.getGraphics(), this);
             this.personagens.add(personagem);
-            //System.out.print("| Personagem criado com sucesso:"+ tipo.getNome());
-        }catch (IllegalArgumentException e ) {
+            System.out.println(tipo.getNome() + " criado com sucesso!");
+            repaint();
+        } catch (IllegalStateException e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } catch (IllegalArgumentException e) {
             System.out.println("Erro ao criar personagem:" + e.getMessage());
         }
     } 

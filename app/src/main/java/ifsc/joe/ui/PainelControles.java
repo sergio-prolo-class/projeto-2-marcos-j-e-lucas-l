@@ -128,14 +128,20 @@ public class PainelControles {
 
     private void criarPersonagemAleatorio(TipoPersonagem tipo) {
 
-        if(!PersonagemFactory.podeSerCriado(tipo)) {
+        if (!PersonagemFactory.podeSerCriado(tipo)) {
             mostrarMensagemErro("Tipo não pode ser criado: "+ tipo.getNome());
             System.out.println("Erro ao criar personagem");
             return;
         }
         int posX = sorteio.nextInt(painelTela.getWidth() - PADDING);
         int posY = sorteio.nextInt(painelTela.getHeight() - PADDING);
-        getTela().criarPersonagem(tipo, posX, posY);
+
+        try {
+            getTela().criarPersonagem(tipo, posX, posY);
+        } catch (IllegalStateException e){
+            mostrarMensagemErro(e.getMessage());
+        }
+
     }
 
     private void criarPersonagemCompletamenteAleatorio() {
