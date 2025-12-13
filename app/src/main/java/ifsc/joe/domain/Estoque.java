@@ -6,11 +6,18 @@ public class Estoque {
     private int madeira;
     private int ouro;
     private int trigo;
+    private int baixas;
 
     public Estoque() {
         this.madeira = 0;
         this.ouro = 0;
         this.trigo = 0;
+        this.baixas = 0;
+    }
+
+    // Método para incrementar baixas.
+    public void incrementarBaixas() {
+        this.baixas++;
     }
 
     // Método para o estoque de recursos.
@@ -29,6 +36,13 @@ public class Estoque {
             return true;
         }
         return false;
+    }
+
+    // Método para resetar recursos.
+    public void resetar() {
+        this.madeira = 0;
+        this.ouro = 0;
+        this.trigo = 0;
     }
 
     public void adicionarMadeira(int quantidade) {
@@ -55,10 +69,8 @@ public class Estoque {
         return trigo;
     }
 
-    // Método para resetar recursos.
-    public void resetar() {
-        this.madeira = 0;
-        this.ouro = 0;
-        this.trigo = 0;
+    public int getBaixas() {
+        return baixas;
     }
+
 }

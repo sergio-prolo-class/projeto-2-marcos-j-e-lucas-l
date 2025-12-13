@@ -269,10 +269,11 @@ public class Tela extends JPanel {
         g.setFont(new Font("Arial", Font. BOLD, 16));
         g.setColor(Color.WHITE);
 
-        String recursos = String.format("🪵 Madeira: %d     💰 Ouro: %d     🌾 Comida: %d",
+        String recursos = String.format(" Madeira: %d     Ouro: %d      Comida: %d      Baixas: %d",
                 estoque.getMadeira(),
                 estoque.getOuro(),
-                estoque.getTrigo());
+                estoque.getTrigo(),
+                estoque.getBaixas());
 
         // Centraliza o texto
         FontMetrics fm = g.getFontMetrics();
@@ -406,31 +407,55 @@ public class Tela extends JPanel {
 
     // Guerreiros atacam unidades próximas causando dano a elas.
     public void combate() {
-        personagens.removeIf(Personagem::estaMorto);
+        int personagensAntes = personagens.size();
+
+        personagens.removeIf(p -> {
+            if (p. estaMorto()) {
+                estoque.incrementarBaixas(); // Incrementa baixas para cada morto
+                return true;
+            }
+            return false;
+        });
 
         personagens.stream()
                 .filter(p -> p instanceof Guerreiro)
                 .forEach(atacante -> {
                     Guerreiro guerreiro = (Guerreiro) atacante;
 
-                    Personagem alvoMaisProximo = personagens. stream()
-                            .filter(p -> p != atacante)
+                    Personagem alvoMaisProximo = personagens.stream()
+                            . filter(p -> p != atacante)
                             .filter(p -> ! p.estaMorto())
-                            . min((p1, p2) -> Double.compare(
+                            .min((p1, p2) -> Double.compare(
                                     atacante.distanciaAlvo(p1),
                                     atacante.distanciaAlvo(p2)
                             ))
-                            .orElse(null);
+                            . orElse(null);
                     if (alvoMaisProximo != null) {
                         guerreiro.ataque(alvoMaisProximo);
                     }
                 });
+
+        // Remove mortos após o combate e conta baixas
+        personagens.removeIf(p -> {
+            if (p.estaMorto()) {
+                estoque.incrementarBaixas();
+                return true;
+            }
+            return false;
+        });
+
         this.repaint();
     }
 
     // Combate por diferenciação de tipo.
     public void combatePorTipo (Class<? extends Personagem> tipo) {
-        personagens.removeIf(Personagem::estaMorto);
+        personagens. removeIf(p -> {
+            if (p.estaMorto()) {
+                estoque. incrementarBaixas();
+                return true;
+            }
+            return false;
+        });
 
         personagens.stream()
                 .filter(tipo::isInstance)
@@ -440,8 +465,8 @@ public class Tela extends JPanel {
 
                     Personagem alvoMaisProximo = personagens.stream()
                             .filter(p -> p != atacante)
-                            .filter(p -> !p.estaMorto())
-                            .min((p1, p2) -> Double.compare(
+                            . filter(p -> !p.estaMorto())
+                            . min((p1, p2) -> Double.compare(
                                     atacante.distanciaAlvo(p1),
                                     atacante.distanciaAlvo(p2)
                             ))
@@ -451,6 +476,16 @@ public class Tela extends JPanel {
                         guerreiro.ataque(alvoMaisProximo);
                     }
                 });
+
+        // Remove mortos após o combate e conta baixas
+        personagens.removeIf(p -> {
+            if (p.estaMorto()) {
+                estoque.incrementarBaixas();
+                return true;
+            }
+            return false;
+        });
+
         this.repaint();
     }
 

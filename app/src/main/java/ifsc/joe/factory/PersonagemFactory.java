@@ -43,6 +43,7 @@ public class PersonagemFactory {
                  custoTrigo = 1;
                  break;
              case CAVALEIRO:
+                 custoTrigo = 1;
                  custoOuro = 1;
                  break;
          }
