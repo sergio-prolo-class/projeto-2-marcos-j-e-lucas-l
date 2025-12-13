@@ -8,11 +8,12 @@ Todas funcionalidades **obrigatória** descritas no site foram implemtadas.
 
 1. Filtro por tipo - Concluido.
 2. Ataque básico - Concluído.
-3. Sistema de morte - Concluído.
-3. Barra de vida - Concluído.
-4. Arquivo de configurações - Concluído.
-5. Fábrica de personagens - concluído
-6. Cache de Recursos - concluído 
+3. Sistema de morte - 90% concluído.
+4. Alcance variável- 90% concluído. 
+5. Barra de vida - 90% Concluído.
+6. Arquivo de configurações - Concluído.
+7. Fábrica de personagens - concluído
+8. Cache de Recursos - concluído 
 
 ---
 
@@ -38,23 +39,23 @@ Todas funcionalidades **obrigatória** descritas no site foram implemtadas.
 
 ### 4 pontos - Filtro por tipo
 
-Adicionado a movimentação dos tipos. Foi criada uma clase chamda `Move` que representa o tipo selecionado, ao ser selecionado outro tipo, e movimentado somente o tipo selecionado;
+Adicionado a movimentação dos tipos. Foi criada uma classe chamda `Move` que representa o tipo selecionado, ao ser selecionado outro tipo, e movimentado somente o tipo selecionado;
 
 ---
 
 ### 3 pontos - Ataque básico
 
-**Descreva o que você fez...** @Lucas
+Adicionado ataque básico para os personagens Arqueiro e Cavaleiro. O ataque funciona com os personagens montados e desmontados, com várias funções implementadas.
 
 ---
 ### 3 pontos - Sistema de morte
 
-**Descreva o que você fez...** @Lucas
+Sistema que organiza como os personagens morrem, quando o personagem tem vida 0 ele some do sistema.
 ---
 
 ### 4 pontos - Barra de vida
 
-**Descreva o que você fez...** @Lucas
+Barra de vida feita na classe Personagem.
 
 ---
 
